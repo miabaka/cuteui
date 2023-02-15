@@ -66,7 +66,7 @@ HWND Win32PlatformWindow::createWindow() {
 	return CreateWindowExW(
 			WS_EX_NOREDIRECTIONBITMAP,
 			Win32Platform::WINDOW_CLASS_NAME,
-			L"",
+			nullptr,
 			WS_OVERLAPPEDWINDOW,
 			CW_USEDEFAULT, CW_USEDEFAULT, // position
 			CW_USEDEFAULT, CW_USEDEFAULT, // size
