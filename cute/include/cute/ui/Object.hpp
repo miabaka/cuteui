@@ -1,7 +1,5 @@
 #pragma once
 
-namespace cute::ui {
-
 class Object {
 public:
 	Object() = default;
@@ -10,7 +8,5 @@ public:
 
 	Object(Object &&) = delete;
 
-	~Object() = default;
+	virtual ~Object() = default;
 };
-
-} // namespace cute::ui

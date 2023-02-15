@@ -1,9 +1,11 @@
 #pragma once
 
+#include <memory>
 #include <string>
-#include "Object.hpp"
 
-namespace cute::ui {
+#include "platform/PlatformWindow.hpp"
+#include "Object.hpp"
+#include "Widget.hpp"
 
 class Window : public Object {
 public:
@@ -11,9 +13,10 @@ public:
 
 	void show();
 
-	void hide();
+	void setMainWidget(std::shared_ptr<Widget> widget);
 
-	void setVisible(bool visible = true);
+private:
+	std::unique_ptr<PlatformWindow> _platformWindow;
+
+	std::shared_ptr<Widget> _mainWidget;
 };
-
-} // namespace cute::ui
