@@ -9,8 +9,9 @@ namespace cuteutil {
 template<typename T>
 class SharedObject {
 public:
-	static std::shared_ptr<T> create() {
-		auto object = std::make_shared<T>();
+	template<typename ...TArgs>
+	static std::shared_ptr<T> create(const TArgs &...args) {
+		auto object = std::make_shared<T>(args...);
 		object->_weakThis = object;
 		return object;
 	}

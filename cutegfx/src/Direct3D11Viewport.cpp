@@ -3,12 +3,17 @@
 #include <cassert>
 #include <stdexcept>
 
+#include <wrl.h>
+
 #include "Direct3D11Renderer.hpp"
+
+using Microsoft::WRL::ComPtr;
 
 Direct3D11Viewport::Direct3D11Viewport(
 		std::shared_ptr<Direct3D11Renderer> renderer
 ) : _renderer(std::move(renderer)) {
 	_device = _renderer->getDevice();
+	_deviceContext = _renderer->getDeviceContext();
 	_compositionDevice = _renderer->getCompositionDevice();
 
 	_renderer->getDxgiAdapter()->GetParent(__uuidof(IDXGIFactory2), &_dxgiFactory);
@@ -50,4 +55,30 @@ void Direct3D11Viewport::createSwapChain(glm::ivec2 size) {
 
 	if (!SUCCEEDED(result))
 		throw std::runtime_error("CreateSwapChainForComposition failed");
+
+	_lastSwapChainSize = size;
+}
+
+void Direct3D11Viewport::resizeSwapChainIfNecessary(glm::ivec2 newSize) {
+	if (newSize == _lastSwapChainSize)
+		return;
+
+	_swapChain->ResizeBuffers(0, newSize.x, newSize.y, DXGI_FORMAT_UNKNOWN, 0);
+	_lastSwapChainSize = newSize;
+}
+
+// TODO: properly handle minimized windows
+void Direct3D11Viewport::present(bool waitSync) {
+	resizeSwapChainIfNecessary(_outputWindow->getClientSize());
+
+	ComPtr<ID3D11Resource> backBuffer;
+	_swapChain->GetBuffer(0, __uuidof(ID3D11Resource), &backBuffer);
+
+	ComPtr<ID3D11RenderTargetView> renderTarget;
+	_device->CreateRenderTargetView(backBuffer.Get(), nullptr, &renderTarget);
+
+	float clearColor[] = {0.75f, 0.3f, 1.f, 1.f};
+	_deviceContext->ClearRenderTargetView(renderTarget.Get(), clearColor);
+
+	_swapChain->Present(waitSync ? 1 : 0, 0);
 }

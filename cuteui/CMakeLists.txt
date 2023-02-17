@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_library(cuteui STATIC
+        src/system/WindowManager.cpp
         src/Application.cpp
         src/Box.cpp
         src/Button.cpp

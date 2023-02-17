@@ -18,6 +18,10 @@ ComPtr<ID3D11Device> Direct3D11Renderer::getDevice() {
 	return _device;
 }
 
+ComPtr<ID3D11DeviceContext> Direct3D11Renderer::getDeviceContext() {
+	return _deviceContext;
+}
+
 ComPtr<IDCompositionDevice> Direct3D11Renderer::getCompositionDevice() {
 	return _compositionDevice;
 }

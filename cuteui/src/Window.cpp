@@ -42,10 +42,14 @@ void Window::setMainWidget(std::shared_ptr<Widget> widget) {
 }
 
 void Window::onVisibilityChange(bool visible) {
-	auto &app = Application::getInstance();
+	auto &wm = Application::getInstance().getWindowManager();
 
 	if (visible)
-		app.registerVisibleWindow(this);
+		wm.registerWindow(asShared());
 	else
-		app.unregisterVisibleWindow(this);
+		wm.unregisterWindow(asShared());
+}
+
+void Window::render(bool waitSync) {
+	_viewport->present(waitSync);
 }

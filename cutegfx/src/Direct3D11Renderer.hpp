@@ -25,6 +25,8 @@ public:
 
 	Microsoft::WRL::ComPtr<ID3D11Device> getDevice();
 
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> getDeviceContext();
+
 	Microsoft::WRL::ComPtr<IDCompositionDevice> getCompositionDevice();
 
 	Microsoft::WRL::ComPtr<IDXGIAdapter> getDxgiAdapter();

@@ -6,10 +6,15 @@
 #include <glm/vec2.hpp>
 #include <cutegfx/Viewport.hpp>
 #include <cutegfx/PlatformWindow.hpp>
+#include <cuteutil/SharedObject.hpp>
 
 #include "Widget.hpp"
 
-class Window : public Widget {
+class WindowManager;
+
+class Window : public cuteutil::SharedObject<Window>, public Widget {
+	friend class WindowManager;
+
 public:
 	using BackdropType = PlatformWindow::BackdropType;
 	using BorderType = PlatformWindow::BorderType;
@@ -33,4 +38,6 @@ private:
 	std::shared_ptr<Widget> _mainWidget;
 
 	void onVisibilityChange(bool visible);
+
+	void render(bool waitSync = true);
 };

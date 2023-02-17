@@ -6,8 +6,10 @@
 
 class MyCuteApp : public Application {
 public:
-	MyCuteApp() : _window({640, 400}, "Мия бака!"),
-	              _secondWindow({640, 400}, "А может даже ьака") {
+	MyCuteApp()  {
+		auto window = Window::create(glm::ivec2{640, 400}, "Мия бака!");
+		auto secondWindow = Window::create(glm::ivec2{640, 400}, "А может даже ьака");
+
 		auto actuallyWorkingButton = std::make_shared<Button>("Мяу");
 
 		auto box = std::make_shared<Box>(Direction::Vertical);
@@ -25,15 +27,11 @@ public:
 
 		box->add(std::make_shared<Spacer>(5));
 
-		_window.setMainWidget(box);
+		window->setMainWidget(box);
 
-		_window.setVisible(true);
-		_secondWindow.setVisible(true);
+		window->setVisible(true);
+		secondWindow->setVisible(true);
 	}
-
-private:
-	Window _window;
-	Window _secondWindow;
 };
 
 int main() {

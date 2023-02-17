@@ -8,7 +8,7 @@
 #include <dxgi1_2.h>
 #include <d3d11.h>
 #include <wrl.h>
-#include "glm/vec2.hpp"
+#include <glm/vec2.hpp>
 
 #include "cutegfx/Viewport.hpp"
 #include "Win32PlatformWindow.hpp"
@@ -23,8 +23,13 @@ public:
 
 	void createSwapChain(glm::ivec2 size);
 
+	void resizeSwapChainIfNecessary(glm::ivec2 newSize);
+
+	void present(bool waitSync) override;
+
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> _device;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> _deviceContext;
 	Microsoft::WRL::ComPtr<IDXGIFactory2> _dxgiFactory;
 	Microsoft::WRL::ComPtr<IDCompositionDevice> _compositionDevice;
 	Microsoft::WRL::ComPtr<IDCompositionTarget> _compositionTarget;
@@ -32,4 +37,5 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain1> _swapChain;
 	std::shared_ptr<Direct3D11Renderer> _renderer;
 	std::shared_ptr<Win32PlatformWindow> _outputWindow;
+	glm::ivec2 _lastSwapChainSize{};
 };

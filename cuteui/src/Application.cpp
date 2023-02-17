@@ -29,20 +29,12 @@ Platform &Application::getPlatform() {
 }
 
 int Application::run() {
-	while (hasVisibleWindows())
+	while (_windowManager.hasWindows())
 		_platform->waitEvents();
 
 	return 0;
 }
 
-bool Application::hasVisibleWindows() const {
-	return !_visibleWindows.empty();
-}
-
-void Application::registerVisibleWindow(Window *window) {
-	_visibleWindows.insert(window);
-}
-
-void Application::unregisterVisibleWindow(Window *window) {
-	_visibleWindows.erase(window);
+WindowManager &Application::getWindowManager() {
+	return _windowManager;
 }
