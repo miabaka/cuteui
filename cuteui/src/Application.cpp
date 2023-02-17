@@ -29,9 +29,8 @@ Platform &Application::getPlatform() {
 }
 
 int Application::run() {
-	do {
+	while (hasVisibleWindows())
 		_platform->waitEvents();
-	} while (hasVisibleWindows());
 
 	return 0;
 }
