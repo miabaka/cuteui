@@ -2,7 +2,6 @@
 
 #include <memory>
 
-#include "Object.hpp"
 #include "Widget.hpp"
 
 enum class Direction {
@@ -10,9 +9,13 @@ enum class Direction {
 	Vertical
 };
 
-class Box : public Object, public Widget {
+class Box : public Widget {
 public:
 	explicit Box(Direction direction = Direction::Horizontal);
+
+	bool isVisible() const override;
+
+	void setVisible(bool visible) override;
 
 	void add(std::shared_ptr<Widget> widget);
 };

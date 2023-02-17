@@ -7,19 +7,18 @@
 #include <cutegfx/Viewport.hpp>
 #include <cutegfx/PlatformWindow.hpp>
 
-#include "Object.hpp"
 #include "Widget.hpp"
 
-class Window : public Object {
+class Window : public Widget {
 public:
 	using BackdropType = PlatformWindow::BackdropType;
 	using BorderType = PlatformWindow::BorderType;
 
 	Window(glm::ivec2 size, const std::string &title);
 
-	bool isVisible() const;
+	bool isVisible() const override;
 
-	void setVisible(bool visible = true);
+	void setVisible(bool visible) override;
 
 	BackdropType getBackdropType() const;
 

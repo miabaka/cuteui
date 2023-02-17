@@ -27,8 +27,8 @@ public:
 
 		_window.setMainWidget(box);
 
-		_window.setVisible();
-		_secondWindow.setVisible();
+		_window.setVisible(true);
+		_secondWindow.setVisible(true);
 	}
 
 private:

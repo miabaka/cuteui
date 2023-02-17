@@ -5,11 +5,9 @@
 
 #include <cutegfx/Platform.hpp>
 
-#include "Object.hpp"
-
 class Window;
 
-class Application : public Object {
+class Application {
 	friend class Window;
 
 public:
@@ -17,7 +15,11 @@ public:
 
 	Application();
 
-	~Application() override;
+	Application(Application &) = delete;
+
+	Application(Application &&) = delete;
+
+	~Application();
 
 	Platform &getPlatform();
 
