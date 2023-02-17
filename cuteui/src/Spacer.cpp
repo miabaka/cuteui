@@ -1,4 +1,4 @@
-#include "cute/ui/Spacer.hpp"
+#include "cuteui/Spacer.hpp"
 
 Spacer::Spacer(int weight) {
 

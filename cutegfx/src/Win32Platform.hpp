@@ -4,7 +4,9 @@
 #define NOMINMAX
 
 #include <windows.h>
-#include "cute/ui/platform/Platform.hpp"
+
+#include "cutegfx/Platform.hpp"
+#include "Direct3D11Renderer.hpp"
 
 class Win32Platform : public Platform {
 public:
@@ -14,10 +16,15 @@ public:
 
 	~Win32Platform() override;
 
-	std::unique_ptr<PlatformWindow> createWindow() override;
+	std::shared_ptr<PlatformWindow> createWindow() override;
+
+	Renderer &getRenderer() override;
+
+	void waitEvents() override;
 
 private:
 	WNDCLASSEXW _windowClass;
+	std::shared_ptr<Direct3D11Renderer> _renderer;
 
 	static WNDCLASSEXW registerWindowClass();
 

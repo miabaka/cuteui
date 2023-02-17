@@ -1,5 +1,7 @@
-#include "cute/ui/Application.hpp"
-#include "platform/Win32Platform.hpp"
+#include "cuteui/Application.hpp"
+
+#include <stdexcept>
+#include <cutegfx/CuteGfx.hpp>
 
 Application *Application::_instance = nullptr;
 
@@ -14,7 +16,7 @@ Application::Application() {
 	if (_instance)
 		throw std::runtime_error("Multiple Application instances can not exist simultaneously");
 
-	_platform = std::make_unique<Win32Platform>();
+	_platform = CuteGfx::createPlatform();
 	_instance = this;
 }
 
@@ -27,5 +29,21 @@ Platform &Application::getPlatform() {
 }
 
 int Application::run() {
+	do {
+		_platform->waitEvents();
+	} while (hasVisibleWindows());
+
 	return 0;
+}
+
+bool Application::hasVisibleWindows() const {
+	return !_visibleWindows.empty();
+}
+
+void Application::registerVisibleWindow(Window *window) {
+	_visibleWindows.insert(window);
+}
+
+void Application::unregisterVisibleWindow(Window *window) {
+	_visibleWindows.erase(window);
 }

@@ -1,4 +1,4 @@
-#include "cute/ui/Box.hpp"
+#include "cuteui/Box.hpp"
 
 Box::Box(Direction direction) {
 

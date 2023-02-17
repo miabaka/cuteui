@@ -1,12 +1,13 @@
-#include <cute/ui/Application.hpp>
-#include <cute/ui/Box.hpp>
-#include <cute/ui/Button.hpp>
-#include <cute/ui/Spacer.hpp>
-#include <cute/ui/Window.hpp>
+#include <cuteui/Application.hpp>
+#include <cuteui/Box.hpp>
+#include <cuteui/Button.hpp>
+#include <cuteui/Spacer.hpp>
+#include <cuteui/Window.hpp>
 
 class MyCuteApp : public Application {
 public:
-	MyCuteApp() : _window(640, 400, "Мия бака!") {
+	MyCuteApp() : _window({640, 400}, "Мия бака!"),
+	              _secondWindow({640, 400}, "А может даже ьака") {
 		auto actuallyWorkingButton = std::make_shared<Button>("Мяу");
 
 		auto box = std::make_shared<Box>(Direction::Vertical);
@@ -27,12 +28,14 @@ public:
 		_window.setMainWidget(box);
 
 		_window.show();
+		_secondWindow.show();
 	}
 
 private:
 	Window _window;
+	Window _secondWindow;
 };
 
 int main() {
-	MyCuteApp().run();
+	return MyCuteApp().run();
 }

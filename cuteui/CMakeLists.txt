@@ -3,14 +3,13 @@ project(cute)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_library(cute STATIC
-        src/platform/Win32Platform.cpp
-        src/platform/Win32PlatformWindow.cpp
+add_library(cuteui STATIC
         src/Application.cpp
         src/Box.cpp
         src/Button.cpp
-        src/EventManager.cpp
         src/Spacer.cpp
         src/Window.cpp)
 
-target_include_directories(cute PUBLIC include)
+target_include_directories(cuteui PUBLIC include)
+
+target_link_libraries(cuteui PUBLIC glm cutegfx)
