@@ -13,7 +13,6 @@ Window::Window(glm::ivec2 size, const std::string &title) {
 
 	_platformWindow->setClientSize(size);
 	_platformWindow->setTitle(title);
-	_platformWindow->setBackdropType(PlatformWindow::BackdropType::Mica);
 
 	_platformWindow->visibilityChanged.bind(&Window::onVisibilityChange, this);
 
