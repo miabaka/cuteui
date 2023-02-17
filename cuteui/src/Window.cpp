@@ -21,8 +21,20 @@ Window::Window(glm::ivec2 size, const std::string &title) {
 	_viewport->setOutputWindow(_platformWindow);
 }
 
-void Window::show() {
+bool Window::isVisible() const {
+	return _platformWindow->isVisible();
+}
+
+void Window::setVisible(bool visible) {
 	_platformWindow->setVisible(true);
+}
+
+Window::BackdropType Window::getBackdropType() const {
+	return _platformWindow->getBackdropType();
+}
+
+bool Window::setBackdropType(BackdropType backdropType) {
+	return _platformWindow->setBackdropType(backdropType);
 }
 
 void Window::setMainWidget(std::shared_ptr<Widget> widget) {

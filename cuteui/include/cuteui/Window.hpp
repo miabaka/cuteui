@@ -12,9 +12,18 @@
 
 class Window : public Object {
 public:
+	using BackdropType = PlatformWindow::BackdropType;
+	using BorderType = PlatformWindow::BorderType;
+
 	Window(glm::ivec2 size, const std::string &title);
 
-	void show();
+	bool isVisible() const;
+
+	void setVisible(bool visible = true);
+
+	BackdropType getBackdropType() const;
+
+	bool setBackdropType(BackdropType backdropType);
 
 	void setMainWidget(std::shared_ptr<Widget> widget);
 
