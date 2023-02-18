@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -14,5 +15,5 @@ public:
 
 	virtual Renderer &getRenderer() = 0;
 
-	virtual void waitEvents() = 0;
+	virtual void runEventLoop(std::function<void(void)> tickHandler) = 0;
 };

@@ -11,6 +11,7 @@
 class Win32Platform : public Platform {
 public:
 	static constexpr auto WINDOW_CLASS_NAME = L"CuteWindow";
+	static constexpr auto HELPER_WINDOW_CLASS_NAME = L"CuteHelper";
 
 	Win32Platform();
 
@@ -20,13 +21,16 @@ public:
 
 	Renderer &getRenderer() override;
 
-	void waitEvents() override;
+	void runEventLoop(std::function<void()> tickHandler) override;
 
 private:
 	WNDCLASSEXW _windowClass;
+	WNDCLASSEXW _helperWindowClass;
 	std::shared_ptr<Direct3D11Renderer> _renderer;
 
 	static WNDCLASSEXW registerWindowClass();
 
-	void unregisterWindowClass() const;
+	static WNDCLASSEXW registerHelperWindowClass();
+
+	void unregisterWindowClasses() const;
 };

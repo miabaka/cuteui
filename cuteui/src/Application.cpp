@@ -29,8 +29,9 @@ Platform &Application::getPlatform() {
 }
 
 int Application::run() {
-	while (_windowManager.hasWindows())
-		_platform->waitEvents();
+	_platform->runEventLoop([this]() {
+		_windowManager.tickWindows();
+	});
 
 	return 0;
 }
