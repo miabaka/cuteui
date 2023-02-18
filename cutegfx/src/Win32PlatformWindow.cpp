@@ -112,6 +112,13 @@ HWND Win32PlatformWindow::createWindow() {
 
 LRESULT Win32PlatformWindow::windowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
+		case WM_PAINT: {
+			PAINTSTRUCT ps;
+			BeginPaint(_handle, &ps);
+			EndPaint(_handle, &ps);
+			return 0;
+		}
+
 		case WM_CLOSE:
 			setVisible(false);
 			return 0;
