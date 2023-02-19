@@ -19,6 +19,12 @@ Window::Window(glm::ivec2 size, const std::string &title) {
 	_viewport = renderer.createViewport();
 
 	_viewport->setOutputWindow(_platformWindow);
+
+	app.getWindowManager().registerWindow(this);
+}
+
+Window::~Window() {
+	Application::getInstance().getWindowManager().unregisterWindow(this);
 }
 
 bool Window::isVisible() const {
@@ -45,9 +51,13 @@ void Window::onVisibilityChange(bool visible) {
 	auto &wm = Application::getInstance().getWindowManager();
 
 	if (visible)
-		wm.registerWindow(asShared());
+		wm.registerVisibleWindow(asShared());
 	else
-		wm.unregisterWindow(asShared());
+		wm.unregisterVisibleWindow(asShared());
+}
+
+void Window::update() {
+
 }
 
 void Window::render(bool waitSync) {

@@ -19,7 +19,7 @@ LRESULT Win32HelperWindow::windowProc(HWND window, UINT message, WPARAM wParam, 
 
 		case WM_USER:
 			if (instance) {
-				instance->executeTickHandler();
+				instance->_tickHandler();
 				return true;
 			}
 
@@ -30,21 +30,28 @@ LRESULT Win32HelperWindow::windowProc(HWND window, UINT message, WPARAM wParam, 
 	return DefWindowProcW(window, message, wParam, lParam);
 }
 
-Win32HelperWindow::Win32HelperWindow(std::function<void()> tickHandler)
-		: _handle(createWindow()),
-		  _tickHandler(std::move(tickHandler)),
-		  _tickerThread(&Win32HelperWindow::tickerMain, this) {
+Win32HelperWindow::Win32HelperWindow() : _handle(createWindow()) {
 	SetPropW(_handle, THIS_PROP_NAME, this);
 }
 
 Win32HelperWindow::~Win32HelperWindow() {
 	RemovePropW(_handle, THIS_PROP_NAME);
 	DestroyWindow(_handle);
-	_tickerThread.join();
+}
+
+void Win32HelperWindow::setTickHandler(std::function<void()> handler) {
+	_tickHandler = std::move(handler);
 }
 
 void Win32HelperWindow::executeTickHandler() {
+	if (!_tickHandler)
+		return;
+
 	_tickHandler();
+}
+
+void Win32HelperWindow::executeTickHandlerIndirect() {
+	SendMessageW(_handle, WM_USER, 0, 0);
 }
 
 HWND Win32HelperWindow::createWindow() {
@@ -65,11 +72,4 @@ HWND Win32HelperWindow::createWindow() {
 		throw std::runtime_error("CreateWindowExW failed: " + std::to_string(GetLastError()));
 
 	return handle;
-}
-
-void Win32HelperWindow::tickerMain() {
-	while (true) {
-		if (!SendMessageW(_handle, WM_USER, 0, 0))
-			break;
-	}
 }

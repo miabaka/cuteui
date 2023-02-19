@@ -12,20 +12,21 @@ class Win32HelperWindow {
 public:
 	static LRESULT CALLBACK windowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
 
-	Win32HelperWindow(std::function<void(void)> tickHandler);
+	Win32HelperWindow();
 
 	~Win32HelperWindow();
 
+	void setTickHandler(std::function<void(void)> handler);
+
 	void executeTickHandler();
+
+	void executeTickHandlerIndirect();
 
 private:
 	static constexpr auto THIS_PROP_NAME = L"CuteHelper";
 
 	HWND _handle;
 	std::function<void()> _tickHandler;
-	std::thread _tickerThread;
 
 	static HWND createWindow();
-
-	void tickerMain();
 };

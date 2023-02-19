@@ -24,7 +24,7 @@ Renderer &Win32Platform::getRenderer() {
 }
 
 void Win32Platform::runEventLoop(std::function<void()> tickHandler) {
-	Win32HelperWindow helperWindow(tickHandler);
+	_helperWindow.setTickHandler(tickHandler);
 
 	MSG msg;
 
@@ -32,6 +32,14 @@ void Win32Platform::runEventLoop(std::function<void()> tickHandler) {
 		TranslateMessage(&msg);
 		DispatchMessageW(&msg);
 	}
+}
+
+void Win32Platform::stopEventLoop() {
+	PostQuitMessage(0);
+}
+
+void Win32Platform::executeTickHandlerIndirect() {
+	_helperWindow.executeTickHandlerIndirect();
 }
 
 WNDCLASSEXW Win32Platform::registerWindowClass() {

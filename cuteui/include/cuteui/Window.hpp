@@ -21,6 +21,8 @@ public:
 
 	Window(glm::ivec2 size, const std::string &title);
 
+	~Window() override;
+
 	bool isVisible() const override;
 
 	void setVisible(bool visible) override;
@@ -38,6 +40,8 @@ private:
 	std::shared_ptr<Widget> _mainWidget;
 
 	void onVisibilityChange(bool visible);
+
+	void update();
 
 	void render(bool waitSync = true);
 };

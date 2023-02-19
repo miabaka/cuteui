@@ -8,6 +8,8 @@
 #include "cutegfx/Platform.hpp"
 #include "Direct3D11Renderer.hpp"
 
+#include "Win32HelperWindow.hpp"
+
 class Win32Platform : public Platform {
 public:
 	static constexpr auto WINDOW_CLASS_NAME = L"CuteWindow";
@@ -23,10 +25,15 @@ public:
 
 	void runEventLoop(std::function<void()> tickHandler) override;
 
+	void stopEventLoop() override;
+
+	void executeTickHandlerIndirect() override;
+
 private:
 	WNDCLASSEXW _windowClass;
 	WNDCLASSEXW _helperWindowClass;
 	std::shared_ptr<Direct3D11Renderer> _renderer;
+	Win32HelperWindow _helperWindow;
 
 	static WNDCLASSEXW registerWindowClass();
 
