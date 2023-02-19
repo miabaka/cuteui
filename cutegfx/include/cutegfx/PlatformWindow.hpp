@@ -3,7 +3,7 @@
 #include <string>
 
 #include <glm/vec2.hpp>
-#include <cuteutil/Signal.hpp>
+#include <cuteutil/SingleSignal.hpp>
 
 class PlatformWindow {
 public:
@@ -33,5 +33,5 @@ public:
 
 	virtual void setVisible(bool visible) = 0;
 
-	cuteutil::Signal<bool> visibilityChanged;
+	cuteutil::SingleSignal<bool> visibilityChanged;
 };

@@ -25,11 +25,7 @@ Window::Window(glm::ivec2 size, const std::string &title) {
 
 Window::~Window() {
 	Application::getInstance().getWindowManager().unregisterWindow(this);
-
-	// Let Win32PlatformWindow instance destruct itself to prevent calling
-	// the signal handlers of the destructed Window class instance
-	_platformWindow = nullptr;
-	_viewport = nullptr;
+	_platformWindow->visibilityChanged.reset();
 }
 
 bool Window::isVisible() const {
@@ -37,7 +33,7 @@ bool Window::isVisible() const {
 }
 
 void Window::setVisible(bool visible) {
-	_platformWindow->setVisible(true);
+	_platformWindow->setVisible(visible);
 }
 
 Window::BackdropType Window::getBackdropType() const {
