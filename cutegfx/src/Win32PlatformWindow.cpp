@@ -5,7 +5,18 @@
 #include "Win32Platform.hpp"
 
 LRESULT Win32PlatformWindow::dispatchWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
-	auto *instance = static_cast<Win32PlatformWindow *>(GetPropW(window, THIS_PROP_NAME));
+	Win32PlatformWindow *instance;
+
+	if (message == WM_NCCREATE) {
+		auto *createStruct = reinterpret_cast<CREATESTRUCT *>(lParam);
+
+		instance = static_cast<Win32PlatformWindow *>(createStruct->lpCreateParams);
+		instance->_handle = window;
+
+		SetWindowLongPtrW(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(instance));
+	} else {
+		instance = reinterpret_cast<Win32PlatformWindow *>(GetWindowLongPtrW(window, GWLP_USERDATA));
+	}
 
 	if (!instance)
 		return DefWindowProcW(window, message, wParam, lParam);
@@ -13,12 +24,12 @@ LRESULT Win32PlatformWindow::dispatchWindowProc(HWND window, UINT message, WPARA
 	return instance->windowProc(message, wParam, lParam);
 }
 
-Win32PlatformWindow::Win32PlatformWindow() : _handle(createWindow()) {
-	SetPropW(_handle, THIS_PROP_NAME, this);
+Win32PlatformWindow::Win32PlatformWindow() {
+	createWindow();
 }
 
 Win32PlatformWindow::~Win32PlatformWindow() {
-	RemovePropW(_handle, THIS_PROP_NAME);
+	SetWindowLongPtrW(_handle, GWLP_USERDATA, 0);
 	DestroyWindow(_handle);
 }
 
@@ -95,8 +106,8 @@ void Win32PlatformWindow::setVisible(bool visible) {
 	ShowWindow(_handle, visible ? SW_SHOWDEFAULT : SW_HIDE);
 }
 
-HWND Win32PlatformWindow::createWindow() {
-	return CreateWindowExW(
+void Win32PlatformWindow::createWindow() {
+	CreateWindowExW(
 			WS_EX_NOREDIRECTIONBITMAP,
 			Win32Platform::WINDOW_CLASS_NAME,
 			nullptr,
@@ -106,7 +117,7 @@ HWND Win32PlatformWindow::createWindow() {
 			nullptr, // parent
 			nullptr, // menu
 			GetModuleHandleW(nullptr),
-			nullptr // param
+			this // param
 	);
 }
 

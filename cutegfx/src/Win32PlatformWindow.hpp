@@ -8,8 +8,6 @@
 
 class Win32PlatformWindow : public PlatformWindow {
 public:
-	static constexpr auto THIS_PROP_NAME = L"CuteWindow";
-
 	static LRESULT CALLBACK dispatchWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
 
 	Win32PlatformWindow();
@@ -33,10 +31,10 @@ public:
 	void setVisible(bool visible) override;
 
 private:
-	HWND _handle;
+	HWND _handle{};
 	BackdropType _backdropType = BackdropType::Default;
 
-	static HWND createWindow();
+	void createWindow();
 
 	LRESULT CALLBACK windowProc(UINT message, WPARAM wParam, LPARAM lParam);
 
