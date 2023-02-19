@@ -3,7 +3,7 @@
 #include "cuteui/system/WindowManager.hpp"
 
 bool WindowManager::hasVisibleWindows() const {
-	return !_visibleWindows.empty();
+	return _hasVisibleWindows;
 }
 
 void WindowManager::registerWindow(Window *window) {
@@ -15,14 +15,26 @@ void WindowManager::unregisterWindow(Window *window) {
 }
 
 void WindowManager::registerVisibleWindow(std::shared_ptr<Window> window) {
+	std::scoped_lock lock(_visibleWindowsMutex);
+
 	_visibleWindows.insert(window);
+
+	_hasVisibleWindows = true;
+	_visibleWindowsChanged = true;
 }
 
 void WindowManager::unregisterVisibleWindow(std::shared_ptr<Window> window) {
+	std::scoped_lock lock(_visibleWindowsMutex);
+
 	_visibleWindows.erase(window);
 
-	if (!hasVisibleWindows())
-		_lastVisibleWindowClosedHandler();
+	if (!_visibleWindows.empty())
+		return;
+
+	_hasVisibleWindows = false;
+	_visibleWindowsChanged = true;
+
+	_lastVisibleWindowClosedHandler();
 }
 
 void WindowManager::updateWindows() {
@@ -30,16 +42,8 @@ void WindowManager::updateWindows() {
 		window->update();
 }
 
-void WindowManager::renderWindows() {
-	bool waitSync = true;
-
-	for (auto &window: _visibleWindows) {
-		window->render(waitSync);
-		waitSync = false;
-	}
-}
-
 void WindowManager::startRenderThread() {
+	_renderThreadRunning = true;
 	_renderThread = std::thread(&WindowManager::renderMain, this);
 }
 
@@ -49,10 +53,28 @@ void WindowManager::stopRenderThread() {
 }
 
 void WindowManager::renderMain() {
-	_renderThreadRunning = true;
+	std::vector<std::weak_ptr<Window>> windows;
 
 	while (_renderThreadRunning) {
 		_updateHandler();
-		renderWindows();
+
+		if (_visibleWindowsChanged) {
+			std::scoped_lock lock(_visibleWindowsMutex);
+			_visibleWindowsChanged = false;
+			windows.assign(_visibleWindows.begin(), _visibleWindows.end());
+		}
+
+		bool waitSync = true;
+
+		for (auto &weakWindow: windows) {
+			auto window = weakWindow.lock();
+
+			if (!window)
+				continue;
+
+			window->render(waitSync);
+
+			waitSync = false;
+		}
 	}
 }

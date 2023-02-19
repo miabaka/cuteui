@@ -29,7 +29,7 @@ Win32PlatformWindow::Win32PlatformWindow() {
 }
 
 Win32PlatformWindow::~Win32PlatformWindow() {
-	SetWindowLongPtrW(_handle, GWLP_USERDATA, 0);
+	SetWindowLongPtrW(_handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
 	DestroyWindow(_handle);
 }
 
