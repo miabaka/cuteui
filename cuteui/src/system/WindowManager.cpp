@@ -44,15 +44,13 @@ void WindowManager::renderMain() {
 	while (true) {
 		if (_visibleWindowsChanged) {
 			std::scoped_lock lock(_visibleWindowsMutex);
-
 			_visibleWindowsChanged = false;
-
-			if (_visibleWindows.empty()) {
-				sUpdate.emit(UpdateType::EventLoopStopRequest);
-				break;
-			}
-
 			windows.assign(_visibleWindows.begin(), _visibleWindows.end());
+		}
+
+		if (windows.empty()) {
+			sUpdate.emit(UpdateType::EventLoopStopRequest);
+			break;
 		}
 
 		sUpdate.emit(UpdateType::Update);
