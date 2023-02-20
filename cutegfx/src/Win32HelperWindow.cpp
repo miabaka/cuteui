@@ -18,10 +18,15 @@ LRESULT Win32HelperWindow::windowProc(HWND window, UINT message, WPARAM wParam, 
 		}
 
 		case WM_USER:
-			if (instance) {
-				instance->_tickHandler();
-				return true;
-			}
+			if (!instance)
+				break;
+
+			if (static_cast<Platform::TickType>(wParam) == Platform::TickType::Update)
+				instance->executeTickHandler();
+			else
+				PostQuitMessage(0);
+
+			return true;
 
 		default:
 			break;
@@ -50,8 +55,8 @@ void Win32HelperWindow::executeTickHandler() {
 	_tickHandler();
 }
 
-void Win32HelperWindow::executeTickHandlerIndirect() {
-	SendMessageW(_handle, WM_USER, 0, 0);
+void Win32HelperWindow::executeTickHandlerIndirect(Platform::TickType tickType) {
+	SendMessageW(_handle, WM_USER, static_cast<WPARAM>(tickType), 0);
 }
 
 HWND Win32HelperWindow::createWindow() {

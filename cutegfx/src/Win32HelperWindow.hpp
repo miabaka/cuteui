@@ -8,6 +8,8 @@
 
 #include <windows.h>
 
+#include "cutegfx/Platform.hpp"
+
 class Win32HelperWindow {
 public:
 	static LRESULT CALLBACK windowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
@@ -20,7 +22,7 @@ public:
 
 	void executeTickHandler();
 
-	void executeTickHandlerIndirect();
+	void executeTickHandlerIndirect(Platform::TickType tickType);
 
 private:
 	static constexpr auto THIS_PROP_NAME = L"CuteHelper";

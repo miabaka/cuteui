@@ -4,7 +4,6 @@
 #include <string>
 
 #include "Win32PlatformWindow.hpp"
-#include "Win32HelperWindow.hpp"
 
 Win32Platform::Win32Platform()
 		: _windowClass(registerWindowClass()),
@@ -32,14 +31,16 @@ void Win32Platform::runEventLoop(std::function<void()> tickHandler) {
 		TranslateMessage(&msg);
 		DispatchMessageW(&msg);
 	}
+
+	// Dispatch remaining messages
+	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+		TranslateMessage(&msg);
+		DispatchMessageW(&msg);
+	}
 }
 
-void Win32Platform::stopEventLoop() {
-	PostQuitMessage(0);
-}
-
-void Win32Platform::executeTickHandlerIndirect() {
-	_helperWindow.executeTickHandlerIndirect();
+void Win32Platform::executeTickHandlerIndirect(Platform::TickType tickType) {
+	_helperWindow.executeTickHandlerIndirect(tickType);
 }
 
 WNDCLASSEXW Win32Platform::registerWindowClass() {

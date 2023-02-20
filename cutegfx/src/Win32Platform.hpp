@@ -25,9 +25,7 @@ public:
 
 	void runEventLoop(std::function<void()> tickHandler) override;
 
-	void stopEventLoop() override;
-
-	void executeTickHandlerIndirect() override;
+	void executeTickHandlerIndirect(Platform::TickType tickType) override;
 
 private:
 	WNDCLASSEXW _windowClass;

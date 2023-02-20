@@ -7,11 +7,14 @@
 #include <thread>
 #include <unordered_set>
 
+#include <cutegfx/Platform.hpp>
+#include <cuteutil/SingleSignal.hpp>
+
 #include "../Window.hpp"
 
 class WindowManager {
 public:
-	bool hasVisibleWindows() const;
+	using UpdateType = Platform::TickType;
 
 	void registerWindow(Window *window);
 
@@ -23,27 +26,17 @@ public:
 
 	void updateWindows();
 
-	void setUpdateHandler(std::function<void()> handler) {
-		_updateHandler = std::move(handler);
-	}
-
-	void setLastVisibleWindowClosedHandler(std::function<void()> handler) {
-		_lastVisibleWindowClosedHandler = std::move(handler);
-	}
-
 	void startRenderThread();
 
-	void stopRenderThread();
+	void joinRenderThread();
+
+	cuteutil::SingleSignal<UpdateType> sUpdate;
 
 private:
 	std::unordered_set<Window *> _windows;
 	std::unordered_set<std::shared_ptr<Window>> _visibleWindows;
-	std::function<void()> _updateHandler;
-	std::function<void()> _lastVisibleWindowClosedHandler;
-	std::atomic<bool> _renderThreadRunning;
 	std::thread _renderThread;
 	std::mutex _visibleWindowsMutex;
-	std::atomic<bool> _hasVisibleWindows = false;
 	std::atomic<bool> _visibleWindowsChanged = false;
 
 	void renderMain();

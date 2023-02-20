@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <list>
+#include <utility>
 
 namespace cuteutil {
 
@@ -26,6 +27,10 @@ public:
 		_handler = [instance, method](const TArgs &...args) {
 			std::invoke(method, instance, args...);
 		};
+	}
+
+	void bind(std::function<void(const TArgs &...)> handler) {
+		_handler = std::move(handler);
 	}
 
 	void reset() {

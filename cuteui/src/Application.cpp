@@ -29,12 +29,8 @@ Platform &Application::getPlatform() {
 }
 
 int Application::run() {
-	_windowManager.setUpdateHandler([this]() {
-		_platform->executeTickHandlerIndirect();
-	});
-
-	_windowManager.setLastVisibleWindowClosedHandler([this]() {
-		_platform->stopEventLoop();
+	_windowManager.sUpdate.bind([this](WindowManager::UpdateType type) {
+		_platform->executeTickHandlerIndirect(type);
 	});
 
 	_windowManager.startRenderThread();
@@ -43,7 +39,7 @@ int Application::run() {
 		_windowManager.updateWindows();
 	});
 
-	_windowManager.stopRenderThread();
+	_windowManager.joinRenderThread();
 
 	return 0;
 }
