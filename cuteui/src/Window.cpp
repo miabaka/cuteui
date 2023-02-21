@@ -1,22 +1,22 @@
 #include "cuteui/Application.hpp"
 
-#include <iostream>
 #include "cuteui/Window.hpp"
 
 Window::Window(glm::ivec2 size, const std::string &title) {
 	auto &app = Application::getInstance();
 
 	cutegfx::Platform &platform = app.getPlatform();
-	cutegfx::Device &device = platform.getDevice();
+	cutegfx::Renderer &renderer = platform.getRenderer();
 
 	_platformWindow = platform.createWindow();
+
+	_platformWindow->sVisibilityChange.bind(&Window::onVisibilityChange, this);
+	_platformWindow->sFocus.bind(&Window::onFocus, this);
 
 	_platformWindow->setClientSize(size);
 	_platformWindow->setTitle(title);
 
-	_platformWindow->visibilityChanged.bind(&Window::onVisibilityChange, this);
-
-	_viewport = device.createViewport();
+	_viewport = renderer.createViewport();
 
 	_viewport->setOutputWindow(_platformWindow);
 
@@ -25,7 +25,7 @@ Window::Window(glm::ivec2 size, const std::string &title) {
 
 Window::~Window() {
 	Application::getInstance().getWindowManager().unregisterWindow(this);
-	_platformWindow->visibilityChanged.reset();
+	_platformWindow->sVisibilityChange.reset();
 }
 
 bool Window::isVisible() const {
@@ -48,7 +48,7 @@ void Window::setMainWidget(std::shared_ptr<Widget> widget) {
 	_mainWidget = std::move(widget);
 }
 
-void Window::onVisibilityChange(bool visible) {
+void Window::onVisibilityChange(const bool &visible) {
 	auto &wm = Application::getInstance().getWindowManager();
 
 	if (visible)
@@ -57,10 +57,14 @@ void Window::onVisibilityChange(bool visible) {
 		wm.unregisterVisibleWindow(asShared());
 }
 
-void Window::update() {
+void Window::onFocus() {
+	Application::getInstance().getWindowManager().setLastActiveWindow(asShared());
+}
+
+void Window::updateAndDraw() {
 
 }
 
-void Window::render(bool waitSync) {
+void Window::present(bool waitSync) {
 	_viewport->present(waitSync);
 }

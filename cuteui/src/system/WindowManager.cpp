@@ -1,5 +1,7 @@
 #include "cuteui/system/WindowManager.hpp"
 
+#include "cuteui/Application.hpp"
+
 void WindowManager::registerWindow(Window *window) {
 	_windows.insert(window);
 }
@@ -19,15 +21,28 @@ void WindowManager::unregisterVisibleWindow(std::shared_ptr<Window> window) {
 
 	_visibleWindows.erase(window);
 
+	if (_lastActiveWindow == window)
+		_lastActiveWindow = nullptr;
+
 	if (!_visibleWindows.empty())
 		return;
 
 	_visibleWindowsChanged = true;
 }
 
+std::shared_ptr<Window> WindowManager::getLastActiveWindow() {
+	std::scoped_lock lock(_lastActiveWindowMutex);
+	return _lastActiveWindow;
+}
+
+void WindowManager::setLastActiveWindow(std::shared_ptr<Window> window) {
+	std::scoped_lock lock(_lastActiveWindowMutex);
+	_lastActiveWindow = std::move(window);
+}
+
 void WindowManager::updateWindows() {
 	for (auto &window: _windows)
-		window->update();
+		window->updateAndDraw();
 }
 
 void WindowManager::startRenderThread() {
@@ -39,7 +54,11 @@ void WindowManager::joinRenderThread() {
 }
 
 void WindowManager::renderMain() {
-	std::vector<std::weak_ptr<Window>> windows;
+	cutegfx::Renderer &renderer = Application::getInstance()
+			.getPlatform()
+			.getRenderer();
+
+	std::vector<std::shared_ptr<Window>> windows;
 
 	while (true) {
 		if (_visibleWindowsChanged) {
@@ -55,17 +74,20 @@ void WindowManager::renderMain() {
 
 		sUpdate.emit(UpdateType::Update);
 
-		bool waitSync = true;
+		renderer.render();
 
-		for (auto &weakWindow: windows) {
-			auto window = weakWindow.lock();
+		std::shared_ptr<Window> lastActiveWindow = getLastActiveWindow();
 
-			if (!window)
+		for (auto &window: windows) {
+			if (window == lastActiveWindow)
 				continue;
 
-			window->render(waitSync);
-
-			waitSync = false;
+			window->present(!lastActiveWindow && window == windows.back());
 		}
+
+		if (!lastActiveWindow)
+			continue;
+
+		lastActiveWindow->present(true);
 	}
 }

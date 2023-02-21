@@ -17,7 +17,7 @@ class Window : public cuteutil::SharedObject<Window>, public Widget {
 
 public:
 	using BackdropType = cutegfx::Window::BackdropType;
-	using BorderType = cutegfx::Window::BorderType;
+	using DecorationMode = cutegfx::Window::DecorationMode;
 
 	Window(glm::ivec2 size, const std::string &title);
 
@@ -39,9 +39,11 @@ private:
 
 	std::shared_ptr<Widget> _mainWidget;
 
-	void onVisibilityChange(bool visible);
+	void onVisibilityChange(const bool &visible);
 
-	void update();
+	void onFocus();
 
-	void render(bool waitSync = true);
+	void updateAndDraw();
+
+	void present(bool waitSync = true);
 };

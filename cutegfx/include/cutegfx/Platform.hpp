@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "Device.hpp"
+#include "Renderer.hpp"
 #include "Window.hpp"
 
 namespace cutegfx {
@@ -22,7 +22,7 @@ public:
 
 	virtual std::shared_ptr<Window> createWindow() = 0;
 
-	virtual Device &getDevice() = 0;
+	virtual Renderer &getRenderer() = 0;
 
 	virtual void runEventLoop(std::function<void(void)> tickHandler) = 0;
 

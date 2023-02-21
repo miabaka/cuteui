@@ -7,6 +7,7 @@ add_library(cutegfx STATIC
         src/Direct3D11Device.cpp
         src/Direct3D11Viewport.cpp
         src/Platform.cpp
+        src/Renderer.cpp
         src/Win32HelperWindow.cpp
         src/Win32Platform.cpp
         src/Win32Window.cpp)

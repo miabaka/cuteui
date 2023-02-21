@@ -22,13 +22,6 @@ public:
 		};
 	}
 
-	template<typename TClass, typename TClassInstance>
-	void bind(void (TClass::*method)(TArgs ...), TClassInstance *instance) {
-		_handler = [instance, method](const TArgs &...args) {
-			std::invoke(method, instance, args...);
-		};
-	}
-
 	void bind(std::function<void(const TArgs &...)> handler) {
 		_handler = std::move(handler);
 	}

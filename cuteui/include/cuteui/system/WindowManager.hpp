@@ -24,6 +24,10 @@ public:
 
 	void unregisterVisibleWindow(std::shared_ptr<Window> window);
 
+	std::shared_ptr<Window> getLastActiveWindow();
+
+	void setLastActiveWindow(std::shared_ptr<Window> window);
+
 	void updateWindows();
 
 	void startRenderThread();
@@ -35,8 +39,10 @@ public:
 private:
 	std::unordered_set<Window *> _windows;
 	std::unordered_set<std::shared_ptr<Window>> _visibleWindows;
+	std::shared_ptr<Window> _lastActiveWindow;
 	std::thread _renderThread;
 	std::mutex _visibleWindowsMutex;
+	std::mutex _lastActiveWindowMutex;
 	std::atomic<bool> _visibleWindowsChanged = false;
 
 	void renderMain();

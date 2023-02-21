@@ -10,7 +10,7 @@ using namespace cutegfx;
 Win32Platform::Win32Platform()
 		: _windowClass(registerWindowClass()),
 		  _helperWindowClass(registerHelperWindowClass()),
-		  _device(Direct3D11Device::create()) {}
+		  _renderer(std::make_shared<Renderer>(Direct3D11Device::create())) {}
 
 Win32Platform::~Win32Platform() {
 	unregisterWindowClasses();
@@ -20,8 +20,8 @@ std::shared_ptr<Window> Win32Platform::createWindow() {
 	return std::make_shared<Win32Window>();
 }
 
-Device &Win32Platform::getDevice() {
-	return *_device;
+Renderer &Win32Platform::getRenderer() {
+	return *_renderer;
 }
 
 void Win32Platform::runEventLoop(std::function<void()> tickHandler) {

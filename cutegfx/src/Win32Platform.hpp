@@ -23,7 +23,7 @@ public:
 
 	std::shared_ptr<Window> createWindow() override;
 
-	Device &getDevice() override;
+	Renderer &getRenderer() override;
 
 	void runEventLoop(std::function<void()> tickHandler) override;
 
@@ -32,7 +32,7 @@ public:
 private:
 	WNDCLASSEXW _windowClass;
 	WNDCLASSEXW _helperWindowClass;
-	std::shared_ptr<Direct3D11Device> _device;
+	std::shared_ptr<Renderer> _renderer;
 	Win32HelperWindow _helperWindow;
 
 	static WNDCLASSEXW registerWindowClass();

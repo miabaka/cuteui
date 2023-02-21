@@ -11,12 +11,15 @@ class Window {
 public:
 	enum class BackdropType {
 		Default,
-		Mica
+		Mica,
+		Transparent,
+		TransparentBlur
 	};
 
-	enum class BorderType {
+	enum class DecorationMode {
 		Default,
-		WithoutCaption
+		WithoutCaption,
+		Borderless
 	};
 
 	virtual ~Window() = default;
@@ -35,7 +38,8 @@ public:
 
 	virtual void setVisible(bool visible) = 0;
 
-	cuteutil::SingleSignal<bool> visibilityChanged;
+	cuteutil::SingleSignal<bool> sVisibilityChange;
+	cuteutil::SingleSignal<> sFocus;
 };
 
 } // namespace cutegfx

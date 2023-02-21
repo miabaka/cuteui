@@ -137,7 +137,7 @@ LRESULT Win32Window::windowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 			return 0;
 
 		case WM_SHOWWINDOW:
-			visibilityChanged.emit(wParam);
+			sVisibilityChange.emit(wParam);
 			return 0;
 
 		case WM_SYSCOMMAND:
@@ -148,6 +148,10 @@ LRESULT Win32Window::windowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 
 		case WM_ERASEBKGND:
 			return true;
+
+		case WM_ACTIVATE:
+			if (LOWORD(wParam) != WA_INACTIVE)
+				sFocus.emit();
 
 		default:
 			break;
