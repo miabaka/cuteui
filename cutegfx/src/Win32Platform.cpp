@@ -8,7 +8,7 @@
 Win32Platform::Win32Platform()
 		: _windowClass(registerWindowClass()),
 		  _helperWindowClass(registerHelperWindowClass()),
-		  _renderer(Direct3D11Renderer::create()) {}
+		  _device(Direct3D11Device::create()) {}
 
 Win32Platform::~Win32Platform() {
 	unregisterWindowClasses();
@@ -18,8 +18,8 @@ std::shared_ptr<PlatformWindow> Win32Platform::createWindow() {
 	return std::make_shared<Win32PlatformWindow>();
 }
 
-Renderer &Win32Platform::getRenderer() {
-	return *_renderer;
+Device &Win32Platform::getDevice() {
+	return *_device;
 }
 
 void Win32Platform::runEventLoop(std::function<void()> tickHandler) {

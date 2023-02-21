@@ -5,9 +5,9 @@
 #include "PlatformWindow.hpp"
 #include "Viewport.hpp"
 
-class Renderer {
+class Device {
 public:
-	virtual ~Renderer() = default;
+	virtual ~Device() = default;
 
 	virtual std::shared_ptr<Viewport> createViewport() = 0;
 };

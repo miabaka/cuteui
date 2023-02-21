@@ -5,18 +5,17 @@
 
 #include <wrl.h>
 
-#include "Direct3D11Renderer.hpp"
+#include "Direct3D11Device.hpp"
 
 using Microsoft::WRL::ComPtr;
 
-Direct3D11Viewport::Direct3D11Viewport(
-		std::shared_ptr<Direct3D11Renderer> renderer
-) : _renderer(std::move(renderer)) {
-	_device = _renderer->getDevice();
-	_deviceContext = _renderer->getDeviceContext();
-	_compositionDevice = _renderer->getCompositionDevice();
+Direct3D11Viewport::Direct3D11Viewport(std::shared_ptr<Direct3D11Device> device)
+		: _device(std::move(device)) {
+	_d3dDevice = _device->getDevice();
+	_d3dDeviceContext = _device->getDeviceContext();
+	_compositionDevice = _device->getCompositionDevice();
 
-	_renderer->getDxgiAdapter()->GetParent(__uuidof(IDXGIFactory2), &_dxgiFactory);
+	_device->getDxgiAdapter()->GetParent(__uuidof(IDXGIFactory2), &_dxgiFactory);
 
 	_compositionDevice->CreateVisual(&_compositionVisual);
 }
@@ -51,7 +50,12 @@ void Direct3D11Viewport::createSwapChain(glm::ivec2 size) {
 	swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_PREMULTIPLIED;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 
-	HRESULT result = _dxgiFactory->CreateSwapChainForComposition(_device.Get(), &swapChainDesc, nullptr, &_swapChain);
+	HRESULT result = _dxgiFactory->CreateSwapChainForComposition(
+			_d3dDevice.Get(),
+			&swapChainDesc,
+			nullptr, // restrictToOutput
+			&_swapChain
+	);
 
 	if (!SUCCEEDED(result))
 		throw std::runtime_error("CreateSwapChainForComposition failed");
@@ -75,10 +79,10 @@ void Direct3D11Viewport::present(bool waitSync) {
 	_swapChain->GetBuffer(0, __uuidof(ID3D11Resource), &backBuffer);
 
 	ComPtr<ID3D11RenderTargetView> renderTarget;
-	_device->CreateRenderTargetView(backBuffer.Get(), nullptr, &renderTarget);
+	_d3dDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, &renderTarget);
 
 	float clearColor[] = {0.75f, 0.3f, 1.f, 1.f};
-	_deviceContext->ClearRenderTargetView(renderTarget.Get(), clearColor);
+	_d3dDeviceContext->ClearRenderTargetView(renderTarget.Get(), clearColor);
 
 	_swapChain->Present(waitSync ? 1 : 0, 0);
 }

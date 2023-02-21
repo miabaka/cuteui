@@ -6,7 +6,7 @@
 #include <windows.h>
 
 #include "cutegfx/Platform.hpp"
-#include "Direct3D11Renderer.hpp"
+#include "Direct3D11Device.hpp"
 
 #include "Win32HelperWindow.hpp"
 
@@ -21,7 +21,7 @@ public:
 
 	std::shared_ptr<PlatformWindow> createWindow() override;
 
-	Renderer &getRenderer() override;
+	Device &getDevice() override;
 
 	void runEventLoop(std::function<void()> tickHandler) override;
 
@@ -30,7 +30,7 @@ public:
 private:
 	WNDCLASSEXW _windowClass;
 	WNDCLASSEXW _helperWindowClass;
-	std::shared_ptr<Direct3D11Renderer> _renderer;
+	std::shared_ptr<Direct3D11Device> _device;
 	Win32HelperWindow _helperWindow;
 
 	static WNDCLASSEXW registerWindowClass();

@@ -9,17 +9,17 @@
 #include <wrl.h>
 #include <cuteutil/SharedObject.hpp>
 
-#include "cutegfx/Renderer.hpp"
+#include "cutegfx/Device.hpp"
 
-class Direct3D11Renderer : public cuteutil::SharedObject<Direct3D11Renderer>, public Renderer {
+class Direct3D11Device : public cuteutil::SharedObject<Direct3D11Device>, public Device {
 public:
-	Direct3D11Renderer();
+	Direct3D11Device();
 
-	Direct3D11Renderer(Direct3D11Renderer &) = delete;
+	Direct3D11Device(Direct3D11Device &) = delete;
 
-	Direct3D11Renderer(Direct3D11Renderer &&) = delete;
+	Direct3D11Device(Direct3D11Device &&) = delete;
 
-	~Direct3D11Renderer() override = default;
+	~Direct3D11Device() override = default;
 
 	std::shared_ptr<Viewport> createViewport() override;
 

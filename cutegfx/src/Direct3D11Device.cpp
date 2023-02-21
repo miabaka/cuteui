@@ -1,36 +1,36 @@
-#include "Direct3D11Renderer.hpp"
+#include "Direct3D11Device.hpp"
 
 #include <stdexcept>
 #include "Direct3D11Viewport.hpp"
 
 using Microsoft::WRL::ComPtr;
 
-Direct3D11Renderer::Direct3D11Renderer() {
+Direct3D11Device::Direct3D11Device() {
 	createDevice();
 	createCompositionDevice();
 }
 
-std::shared_ptr<Viewport> Direct3D11Renderer::createViewport() {
+std::shared_ptr<Viewport> Direct3D11Device::createViewport() {
 	return std::make_shared<Direct3D11Viewport>(asShared());
 }
 
-ComPtr<ID3D11Device> Direct3D11Renderer::getDevice() {
+ComPtr<ID3D11Device> Direct3D11Device::getDevice() {
 	return _device;
 }
 
-ComPtr<ID3D11DeviceContext> Direct3D11Renderer::getDeviceContext() {
+ComPtr<ID3D11DeviceContext> Direct3D11Device::getDeviceContext() {
 	return _deviceContext;
 }
 
-ComPtr<IDCompositionDevice> Direct3D11Renderer::getCompositionDevice() {
+ComPtr<IDCompositionDevice> Direct3D11Device::getCompositionDevice() {
 	return _compositionDevice;
 }
 
-ComPtr<IDXGIAdapter> Direct3D11Renderer::getDxgiAdapter() {
+ComPtr<IDXGIAdapter> Direct3D11Device::getDxgiAdapter() {
 	return _dxgiAdapter;
 }
 
-void Direct3D11Renderer::createDevice() {
+void Direct3D11Device::createDevice() {
 	HRESULT result = D3D11CreateDevice(
 			nullptr, // adapter
 			D3D_DRIVER_TYPE_HARDWARE,
@@ -50,7 +50,7 @@ void Direct3D11Renderer::createDevice() {
 	_dxgiDevice->GetParent(__uuidof(IDXGIAdapter), &_dxgiAdapter);
 }
 
-void Direct3D11Renderer::createCompositionDevice() {
+void Direct3D11Device::createCompositionDevice() {
 	HRESULT result = DCompositionCreateDevice(_dxgiDevice.Get(), __uuidof(IDCompositionDevice), &_compositionDevice);
 
 	if (!SUCCEEDED(result))

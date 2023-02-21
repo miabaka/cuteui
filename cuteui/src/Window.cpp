@@ -7,7 +7,7 @@ Window::Window(glm::ivec2 size, const std::string &title) {
 	auto &app = Application::getInstance();
 
 	Platform &platform = app.getPlatform();
-	Renderer &renderer = platform.getRenderer();
+	Device &device = platform.getDevice();
 
 	_platformWindow = platform.createWindow();
 
@@ -16,7 +16,7 @@ Window::Window(glm::ivec2 size, const std::string &title) {
 
 	_platformWindow->visibilityChanged.bind(&Window::onVisibilityChange, this);
 
-	_viewport = renderer.createViewport();
+	_viewport = device.createViewport();
 
 	_viewport->setOutputWindow(_platformWindow);
 

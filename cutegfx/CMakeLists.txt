@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_library(cutegfx STATIC
         src/CuteGfx.cpp
-        src/Direct3D11Renderer.cpp
+        src/Direct3D11Device.cpp
         src/Direct3D11Viewport.cpp
         src/Win32HelperWindow.cpp
         src/Win32Platform.cpp

@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "Renderer.hpp"
+#include "Device.hpp"
 #include "PlatformWindow.hpp"
 
 class Platform {
@@ -18,7 +18,7 @@ public:
 
 	virtual std::shared_ptr<PlatformWindow> createWindow() = 0;
 
-	virtual Renderer &getRenderer() = 0;
+	virtual Device &getDevice() = 0;
 
 	virtual void runEventLoop(std::function<void(void)> tickHandler) = 0;
 
