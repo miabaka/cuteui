@@ -1,4 +1,4 @@
-#include "Win32PlatformWindow.hpp"
+#include "Win32Window.hpp"
 
 #include <string>
 #include <dwmapi.h>
@@ -6,18 +6,18 @@
 
 using namespace cutegfx;
 
-LRESULT Win32PlatformWindow::dispatchWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
-	Win32PlatformWindow *instance;
+LRESULT Win32Window::dispatchWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
+	Win32Window *instance;
 
 	if (message == WM_NCCREATE) {
 		auto *createStruct = reinterpret_cast<CREATESTRUCT *>(lParam);
 
-		instance = static_cast<Win32PlatformWindow *>(createStruct->lpCreateParams);
+		instance = static_cast<Win32Window *>(createStruct->lpCreateParams);
 		instance->_handle = window;
 
 		SetWindowLongPtrW(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(instance));
 	} else {
-		instance = reinterpret_cast<Win32PlatformWindow *>(GetWindowLongPtrW(window, GWLP_USERDATA));
+		instance = reinterpret_cast<Win32Window *>(GetWindowLongPtrW(window, GWLP_USERDATA));
 	}
 
 	if (!instance)
@@ -26,16 +26,16 @@ LRESULT Win32PlatformWindow::dispatchWindowProc(HWND window, UINT message, WPARA
 	return instance->windowProc(message, wParam, lParam);
 }
 
-Win32PlatformWindow::Win32PlatformWindow() {
+Win32Window::Win32Window() {
 	createWindow();
 }
 
-Win32PlatformWindow::~Win32PlatformWindow() {
+Win32Window::~Win32Window() {
 	SetWindowLongPtrW(_handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
 	DestroyWindow(_handle);
 }
 
-HWND Win32PlatformWindow::getHandle() const {
+HWND Win32Window::getHandle() const {
 	return _handle;
 }
 
@@ -43,13 +43,13 @@ static glm::ivec2 rectToSize(RECT rect) {
 	return {rect.right - rect.left, rect.bottom - rect.top};
 }
 
-glm::ivec2 Win32PlatformWindow::getClientSize() const {
+glm::ivec2 Win32Window::getClientSize() const {
 	RECT clientRect;
 	GetClientRect(_handle, &clientRect);
 	return rectToSize(clientRect);
 }
 
-void Win32PlatformWindow::setClientSize(glm::ivec2 size) {
+void Win32Window::setClientSize(glm::ivec2 size) {
 	RECT windowRect = {0, 0, size.x, size.y};
 	AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, false);
 
@@ -80,15 +80,15 @@ static std::wstring convertUtf8ToUtf16(const std::string &src) {
 	return dst;
 }
 
-void Win32PlatformWindow::setTitle(const std::string &title) {
+void Win32Window::setTitle(const std::string &title) {
 	SetWindowTextW(_handle, convertUtf8ToUtf16(title).c_str());
 }
 
-PlatformWindow::BackdropType Win32PlatformWindow::getBackdropType() const {
+Window::BackdropType Win32Window::getBackdropType() const {
 	return _backdropType;
 }
 
-bool Win32PlatformWindow::setBackdropType(BackdropType backdropType) {
+bool Win32Window::setBackdropType(BackdropType backdropType) {
 	if (backdropType == _backdropType)
 		return true;
 
@@ -100,15 +100,15 @@ bool Win32PlatformWindow::setBackdropType(BackdropType backdropType) {
 	return true;
 }
 
-bool Win32PlatformWindow::isVisible() const {
+bool Win32Window::isVisible() const {
 	return IsWindowVisible(_handle);
 }
 
-void Win32PlatformWindow::setVisible(bool visible) {
+void Win32Window::setVisible(bool visible) {
 	ShowWindow(_handle, visible ? SW_SHOWDEFAULT : SW_HIDE);
 }
 
-void Win32PlatformWindow::createWindow() {
+void Win32Window::createWindow() {
 	CreateWindowExW(
 			WS_EX_NOREDIRECTIONBITMAP,
 			Win32Platform::WINDOW_CLASS_NAME,
@@ -123,7 +123,7 @@ void Win32PlatformWindow::createWindow() {
 	);
 }
 
-LRESULT Win32PlatformWindow::windowProc(UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT Win32Window::windowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_PAINT: {
 			PAINTSTRUCT ps;
@@ -180,7 +180,7 @@ static bool setMicaEffectEnabledPre22523(HWND window, bool enabled) {
 	return SUCCEEDED(result);
 }
 
-bool Win32PlatformWindow::setMicaEffectEnabled(bool enabled) {
+bool Win32Window::setMicaEffectEnabled(bool enabled) {
 	if (setMicaEffectEnabled22523(_handle, enabled))
 		return true;
 

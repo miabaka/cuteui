@@ -21,11 +21,11 @@ Direct3D11Viewport::Direct3D11Viewport(std::shared_ptr<Direct3D11Device> device)
 	_compositionDevice->CreateVisual(&_compositionVisual);
 }
 
-void Direct3D11Viewport::setOutputWindow(std::shared_ptr<PlatformWindow> window) {
+void Direct3D11Viewport::setOutputWindow(std::shared_ptr<Window> window) {
 	// TODO: properly handle window changing
 	assert(window && !_outputWindow);
 
-	_outputWindow = std::dynamic_pointer_cast<Win32PlatformWindow>(window);
+	_outputWindow = std::dynamic_pointer_cast<Win32Window>(window);
 
 	createSwapChain(_outputWindow->getClientSize());
 

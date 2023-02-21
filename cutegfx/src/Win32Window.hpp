@@ -4,17 +4,17 @@
 #define NOMINMAX
 
 #include <windows.h>
-#include "cutegfx/PlatformWindow.hpp"
+#include "cutegfx/Window.hpp"
 
 namespace cutegfx {
 
-class Win32PlatformWindow : public PlatformWindow {
+class Win32Window : public Window {
 public:
 	static LRESULT CALLBACK dispatchWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
 
-	Win32PlatformWindow();
+	Win32Window();
 
-	~Win32PlatformWindow() override;
+	~Win32Window() override;
 
 	HWND getHandle() const;
 

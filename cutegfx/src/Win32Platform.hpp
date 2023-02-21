@@ -21,7 +21,7 @@ public:
 
 	~Win32Platform() override;
 
-	std::shared_ptr<PlatformWindow> createWindow() override;
+	std::shared_ptr<Window> createWindow() override;
 
 	Device &getDevice() override;
 

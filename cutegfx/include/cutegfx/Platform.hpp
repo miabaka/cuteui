@@ -5,7 +5,7 @@
 #include <string>
 
 #include "Device.hpp"
-#include "PlatformWindow.hpp"
+#include "Window.hpp"
 
 namespace cutegfx {
 
@@ -20,7 +20,7 @@ public:
 
 	virtual ~Platform() = default;
 
-	virtual std::shared_ptr<PlatformWindow> createWindow() = 0;
+	virtual std::shared_ptr<Window> createWindow() = 0;
 
 	virtual Device &getDevice() = 0;
 

@@ -7,7 +7,7 @@
 
 namespace cutegfx {
 
-class PlatformWindow {
+class Window {
 public:
 	enum class BackdropType {
 		Default,
@@ -19,7 +19,7 @@ public:
 		WithoutCaption
 	};
 
-	virtual ~PlatformWindow() = default;
+	virtual ~Window() = default;
 
 	virtual glm::ivec2 getClientSize() const = 0;
 

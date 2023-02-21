@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "PlatformWindow.hpp"
+#include "Window.hpp"
 #include "Viewport.hpp"
 
 namespace cutegfx {

@@ -9,7 +9,7 @@ add_library(cutegfx STATIC
         src/Platform.cpp
         src/Win32HelperWindow.cpp
         src/Win32Platform.cpp
-        src/Win32PlatformWindow.cpp)
+        src/Win32Window.cpp)
 
 target_include_directories(cutegfx PUBLIC include)
 

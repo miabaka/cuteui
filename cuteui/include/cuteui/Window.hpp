@@ -5,7 +5,7 @@
 
 #include <glm/vec2.hpp>
 #include <cutegfx/Viewport.hpp>
-#include <cutegfx/PlatformWindow.hpp>
+#include <cutegfx/Window.hpp>
 #include <cuteutil/SharedObject.hpp>
 
 #include "Widget.hpp"
@@ -16,8 +16,8 @@ class Window : public cuteutil::SharedObject<Window>, public Widget {
 	friend class WindowManager;
 
 public:
-	using BackdropType = cutegfx::PlatformWindow::BackdropType;
-	using BorderType = cutegfx::PlatformWindow::BorderType;
+	using BackdropType = cutegfx::Window::BackdropType;
+	using BorderType = cutegfx::Window::BorderType;
 
 	Window(glm::ivec2 size, const std::string &title);
 
@@ -34,7 +34,7 @@ public:
 	void setMainWidget(std::shared_ptr<Widget> widget);
 
 private:
-	std::shared_ptr<cutegfx::PlatformWindow> _platformWindow;
+	std::shared_ptr<cutegfx::Window> _platformWindow;
 	std::shared_ptr<cutegfx::Viewport> _viewport;
 
 	std::shared_ptr<Widget> _mainWidget;

@@ -11,7 +11,7 @@
 #include <glm/vec2.hpp>
 
 #include "cutegfx/Viewport.hpp"
-#include "Win32PlatformWindow.hpp"
+#include "Win32Window.hpp"
 
 namespace cutegfx {
 
@@ -21,7 +21,7 @@ class Direct3D11Viewport : public Viewport {
 public:
 	explicit Direct3D11Viewport(std::shared_ptr<Direct3D11Device> device);
 
-	void setOutputWindow(std::shared_ptr<PlatformWindow> window) override;
+	void setOutputWindow(std::shared_ptr<Window> window) override;
 
 	void createSwapChain(glm::ivec2 size);
 
@@ -38,7 +38,7 @@ private:
 	Microsoft::WRL::ComPtr<IDCompositionVisual> _compositionVisual;
 	Microsoft::WRL::ComPtr<IDXGISwapChain1> _swapChain;
 	std::shared_ptr<Direct3D11Device> _device;
-	std::shared_ptr<Win32PlatformWindow> _outputWindow;
+	std::shared_ptr<Win32Window> _outputWindow;
 	glm::ivec2 _lastSwapChainSize{};
 };
 

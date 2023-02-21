@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "Win32PlatformWindow.hpp"
+#include "Win32Window.hpp"
 
 using namespace cutegfx;
 
@@ -16,8 +16,8 @@ Win32Platform::~Win32Platform() {
 	unregisterWindowClasses();
 }
 
-std::shared_ptr<PlatformWindow> Win32Platform::createWindow() {
-	return std::make_shared<Win32PlatformWindow>();
+std::shared_ptr<Window> Win32Platform::createWindow() {
+	return std::make_shared<Win32Window>();
 }
 
 Device &Win32Platform::getDevice() {
@@ -49,7 +49,7 @@ WNDCLASSEXW Win32Platform::registerWindowClass() {
 	WNDCLASSEXW windowClass{};
 
 	windowClass.cbSize = sizeof(windowClass);
-	windowClass.lpfnWndProc = Win32PlatformWindow::dispatchWindowProc;
+	windowClass.lpfnWndProc = Win32Window::dispatchWindowProc;
 	windowClass.hInstance = GetModuleHandleW(nullptr);
 	windowClass.hCursor = LoadCursorA(nullptr, IDC_ARROW);
 	windowClass.lpszClassName = WINDOW_CLASS_NAME;
