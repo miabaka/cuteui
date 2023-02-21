@@ -1,7 +1,6 @@
 #include "cuteui/Application.hpp"
 
 #include <stdexcept>
-#include <cutegfx/CuteGfx.hpp>
 
 Application *Application::_instance = nullptr;
 
@@ -16,7 +15,7 @@ Application::Application() {
 	if (_instance)
 		throw std::runtime_error("Multiple Application instances can not exist simultaneously");
 
-	_platform = CuteGfx::createPlatform();
+	_platform = cutegfx::Platform::createBest();
 	_instance = this;
 }
 
@@ -24,7 +23,7 @@ Application::~Application() {
 	_instance = nullptr;
 }
 
-Platform &Application::getPlatform() {
+cutegfx::Platform &Application::getPlatform() {
 	return *_platform;
 }
 

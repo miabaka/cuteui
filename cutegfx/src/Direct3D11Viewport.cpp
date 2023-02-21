@@ -7,6 +7,7 @@
 
 #include "Direct3D11Device.hpp"
 
+using namespace cutegfx;
 using Microsoft::WRL::ComPtr;
 
 Direct3D11Viewport::Direct3D11Viewport(std::shared_ptr<Direct3D11Device> device)

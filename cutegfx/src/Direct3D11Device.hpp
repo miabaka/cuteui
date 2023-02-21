@@ -11,6 +11,8 @@
 
 #include "cutegfx/Device.hpp"
 
+namespace cutegfx {
+
 class Direct3D11Device : public cuteutil::SharedObject<Direct3D11Device>, public Device {
 public:
 	Direct3D11Device();
@@ -42,3 +44,5 @@ private:
 
 	void createCompositionDevice();
 };
+
+} // namespace cutegfx

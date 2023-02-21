@@ -14,7 +14,7 @@
 
 class WindowManager {
 public:
-	using UpdateType = Platform::TickType;
+	using UpdateType = cutegfx::Platform::TickType;
 
 	void registerWindow(Window *window);
 

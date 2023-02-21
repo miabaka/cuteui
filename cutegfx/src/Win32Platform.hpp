@@ -10,6 +10,8 @@
 
 #include "Win32HelperWindow.hpp"
 
+namespace cutegfx {
+
 class Win32Platform : public Platform {
 public:
 	static constexpr auto WINDOW_CLASS_NAME = L"CuteWindow";
@@ -39,3 +41,5 @@ private:
 
 	void unregisterWindowClasses() const;
 };
+
+} // namespace cutegfx

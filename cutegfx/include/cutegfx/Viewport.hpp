@@ -3,6 +3,8 @@
 #include <memory>
 #include "PlatformWindow.hpp"
 
+namespace cutegfx {
+
 class Viewport {
 public:
 	virtual ~Viewport() = default;
@@ -11,3 +13,5 @@ public:
 
 	virtual void present(bool waitSync) = 0;
 };
+
+} // namespace cutegfx

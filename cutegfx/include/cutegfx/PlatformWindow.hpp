@@ -5,6 +5,8 @@
 #include <glm/vec2.hpp>
 #include <cuteutil/SingleSignal.hpp>
 
+namespace cutegfx {
+
 class PlatformWindow {
 public:
 	enum class BackdropType {
@@ -35,3 +37,5 @@ public:
 
 	cuteutil::SingleSignal<bool> visibilityChanged;
 };
+
+} // namespace cutegfx

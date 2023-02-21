@@ -10,6 +10,8 @@
 
 #include "cutegfx/Platform.hpp"
 
+namespace cutegfx {
+
 class Win32HelperWindow {
 public:
 	static LRESULT CALLBACK windowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
@@ -32,3 +34,5 @@ private:
 
 	static HWND createWindow();
 };
+
+} // namespace cutegfx

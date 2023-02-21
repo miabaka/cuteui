@@ -5,6 +5,8 @@
 
 #include "Win32PlatformWindow.hpp"
 
+using namespace cutegfx;
+
 Win32Platform::Win32Platform()
 		: _windowClass(registerWindowClass()),
 		  _helperWindowClass(registerHelperWindowClass()),

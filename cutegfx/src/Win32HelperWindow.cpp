@@ -6,6 +6,8 @@
 
 #include "Win32Platform.hpp"
 
+using namespace cutegfx;
+
 LRESULT Win32HelperWindow::windowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
 	auto *instance = static_cast<Win32HelperWindow *>(GetPropW(window, THIS_PROP_NAME));
 

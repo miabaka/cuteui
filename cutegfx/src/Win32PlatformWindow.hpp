@@ -6,6 +6,8 @@
 #include <windows.h>
 #include "cutegfx/PlatformWindow.hpp"
 
+namespace cutegfx {
+
 class Win32PlatformWindow : public PlatformWindow {
 public:
 	static LRESULT CALLBACK dispatchWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
@@ -40,3 +42,5 @@ private:
 
 	bool setMicaEffectEnabled(bool enabled = true);
 };
+
+} // namespace cutegfx

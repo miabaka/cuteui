@@ -16,8 +16,8 @@ class Window : public cuteutil::SharedObject<Window>, public Widget {
 	friend class WindowManager;
 
 public:
-	using BackdropType = PlatformWindow::BackdropType;
-	using BorderType = PlatformWindow::BorderType;
+	using BackdropType = cutegfx::PlatformWindow::BackdropType;
+	using BorderType = cutegfx::PlatformWindow::BorderType;
 
 	Window(glm::ivec2 size, const std::string &title);
 
@@ -34,8 +34,8 @@ public:
 	void setMainWidget(std::shared_ptr<Widget> widget);
 
 private:
-	std::shared_ptr<PlatformWindow> _platformWindow;
-	std::shared_ptr<Viewport> _viewport;
+	std::shared_ptr<cutegfx::PlatformWindow> _platformWindow;
+	std::shared_ptr<cutegfx::Viewport> _viewport;
 
 	std::shared_ptr<Widget> _mainWidget;
 

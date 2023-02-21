@@ -13,6 +13,8 @@
 #include "cutegfx/Viewport.hpp"
 #include "Win32PlatformWindow.hpp"
 
+namespace cutegfx {
+
 class Direct3D11Device;
 
 class Direct3D11Viewport : public Viewport {
@@ -39,3 +41,5 @@ private:
 	std::shared_ptr<Win32PlatformWindow> _outputWindow;
 	glm::ivec2 _lastSwapChainSize{};
 };
+
+} // namespace cutegfx

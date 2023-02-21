@@ -6,8 +6,8 @@
 Window::Window(glm::ivec2 size, const std::string &title) {
 	auto &app = Application::getInstance();
 
-	Platform &platform = app.getPlatform();
-	Device &device = platform.getDevice();
+	cutegfx::Platform &platform = app.getPlatform();
+	cutegfx::Device &device = platform.getDevice();
 
 	_platformWindow = platform.createWindow();
 

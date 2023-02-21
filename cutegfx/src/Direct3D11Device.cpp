@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include "Direct3D11Viewport.hpp"
 
+using namespace cutegfx;
 using Microsoft::WRL::ComPtr;
 
 Direct3D11Device::Direct3D11Device() {

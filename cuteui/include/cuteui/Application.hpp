@@ -24,7 +24,7 @@ public:
 
 	~Application();
 
-	Platform &getPlatform();
+	cutegfx::Platform &getPlatform();
 
 	int run();
 
@@ -32,6 +32,6 @@ public:
 
 private:
 	static Application *_instance;
-	std::unique_ptr<Platform> _platform;
+	std::unique_ptr<cutegfx::Platform> _platform;
 	WindowManager _windowManager;
 };

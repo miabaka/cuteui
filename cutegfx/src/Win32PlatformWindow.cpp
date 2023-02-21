@@ -4,6 +4,8 @@
 #include <dwmapi.h>
 #include "Win32Platform.hpp"
 
+using namespace cutegfx;
+
 LRESULT Win32PlatformWindow::dispatchWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
 	Win32PlatformWindow *instance;
 

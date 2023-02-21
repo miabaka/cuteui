@@ -7,12 +7,16 @@
 #include "Device.hpp"
 #include "PlatformWindow.hpp"
 
+namespace cutegfx {
+
 class Platform {
 public:
 	enum class TickType {
 		Update,
 		EventLoopStopRequest
 	};
+
+	static std::unique_ptr<Platform> createBest();
 
 	virtual ~Platform() = default;
 
@@ -24,3 +28,5 @@ public:
 
 	virtual void executeTickHandlerIndirect(TickType tickType) = 0;
 };
+
+} // namespace cutegfx
