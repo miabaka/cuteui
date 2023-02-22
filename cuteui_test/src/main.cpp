@@ -6,7 +6,7 @@
 
 class MyCuteApp : public Application {
 public:
-	MyCuteApp()  {
+	MyCuteApp() {
 		auto window = Window::create(glm::ivec2{640, 400}, "Мия бака!");
 		auto secondWindow = Window::create(glm::ivec2{640, 400}, "А может даже ьака");
 

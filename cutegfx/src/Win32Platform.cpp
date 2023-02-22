@@ -24,7 +24,7 @@ Renderer &Win32Platform::getRenderer() {
 	return *_renderer;
 }
 
-void Win32Platform::runEventLoop(std::function<void()> tickHandler) {
+int Win32Platform::runEventLoop(std::function<void()> tickHandler) {
 	_helperWindow.setTickHandler(tickHandler);
 
 	MSG msg;
@@ -34,11 +34,15 @@ void Win32Platform::runEventLoop(std::function<void()> tickHandler) {
 		DispatchMessageW(&msg);
 	}
 
+	int result = static_cast<int>(msg.wParam);
+
 	// Dispatch remaining messages
 	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 		TranslateMessage(&msg);
 		DispatchMessageW(&msg);
 	}
+
+	return result;
 }
 
 void Win32Platform::executeTickHandlerIndirect(Platform::TickType tickType) {

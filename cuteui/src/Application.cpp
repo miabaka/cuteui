@@ -38,13 +38,13 @@ int Application::run() {
 
 	_windowManager.startRenderThread();
 
-	_platform->runEventLoop([this]() {
+	int result = _platform->runEventLoop([this]() {
 		_windowManager.updateWindows();
 	});
 
 	_windowManager.joinRenderThread();
 
-	return 0;
+	return result;
 }
 
 WindowManager &Application::getWindowManager() {

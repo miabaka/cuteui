@@ -10,7 +10,7 @@ LRESULT Win32Window::dispatchWindowProc(HWND window, UINT message, WPARAM wParam
 	Win32Window *instance;
 
 	if (message == WM_NCCREATE) {
-		auto *createStruct = reinterpret_cast<CREATESTRUCT *>(lParam);
+		auto *createStruct = reinterpret_cast<CREATESTRUCTW *>(lParam);
 
 		instance = static_cast<Win32Window *>(createStruct->lpCreateParams);
 		instance->_handle = window;

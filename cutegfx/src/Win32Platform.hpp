@@ -25,7 +25,7 @@ public:
 
 	Renderer &getRenderer() override;
 
-	void runEventLoop(std::function<void()> tickHandler) override;
+	int runEventLoop(std::function<void()> tickHandler) override;
 
 	void executeTickHandlerIndirect(Platform::TickType tickType) override;
 

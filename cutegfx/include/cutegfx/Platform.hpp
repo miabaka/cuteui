@@ -24,7 +24,7 @@ public:
 
 	virtual Renderer &getRenderer() = 0;
 
-	virtual void runEventLoop(std::function<void(void)> tickHandler) = 0;
+	virtual int runEventLoop(std::function<void(void)> tickHandler) = 0;
 
 	virtual void executeTickHandlerIndirect(TickType tickType) = 0;
 };
