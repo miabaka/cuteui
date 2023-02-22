@@ -25,7 +25,9 @@ public:
 
 	void createSwapChain(glm::ivec2 size);
 
-	void resizeSwapChainIfNecessary(glm::ivec2 newSize);
+	void clear(glm::vec4 color) override;
+
+	void resize(glm::uvec2 size) override;
 
 	void present(bool waitSync) override;
 
@@ -39,7 +41,9 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain1> _swapChain;
 	std::shared_ptr<Direct3D11Device> _device;
 	std::shared_ptr<Win32Window> _outputWindow;
-	glm::ivec2 _lastSwapChainSize{};
+	glm::uvec2 _lastSwapChainSize{};
+
+	void resizeSwapChainIfNecessary(glm::uvec2 newSize);
 };
 
 } // namespace cutegfx

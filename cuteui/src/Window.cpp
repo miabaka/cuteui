@@ -62,7 +62,14 @@ void Window::onFocus() {
 }
 
 void Window::updateAndDraw() {
+	cutegfx::Renderer &renderer = Application::getInstance()
+			.getPlatform()
+			.getRenderer();
 
+	renderer.setViewport(_viewport);
+
+	renderer.resize(_platformWindow->getClientSize());
+	renderer.clear({0.75f, 0.5f, 1.f, 0.75f});
 }
 
 void Window::present(bool waitSync) {

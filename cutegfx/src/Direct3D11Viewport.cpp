@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include <wrl.h>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Direct3D11Device.hpp"
 
@@ -64,17 +65,10 @@ void Direct3D11Viewport::createSwapChain(glm::ivec2 size) {
 	_lastSwapChainSize = size;
 }
 
-void Direct3D11Viewport::resizeSwapChainIfNecessary(glm::ivec2 newSize) {
-	if (newSize == _lastSwapChainSize)
-		return;
-
-	_swapChain->ResizeBuffers(0, newSize.x, newSize.y, DXGI_FORMAT_UNKNOWN, 0);
-	_lastSwapChainSize = newSize;
-}
-
-// TODO: properly handle minimized windows
-void Direct3D11Viewport::present(bool waitSync) {
-	resizeSwapChainIfNecessary(_outputWindow->getClientSize());
+void Direct3D11Viewport::clear(glm::vec4 color) {
+	color.r *= color.a;
+	color.g *= color.a;
+	color.b *= color.a;
 
 	ComPtr<ID3D11Resource> backBuffer;
 	_swapChain->GetBuffer(0, __uuidof(ID3D11Resource), &backBuffer);
@@ -82,8 +76,22 @@ void Direct3D11Viewport::present(bool waitSync) {
 	ComPtr<ID3D11RenderTargetView> renderTarget;
 	_d3dDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, &renderTarget);
 
-	float clearColor[] = {0.75f, 0.3f, 1.f, 1.f};
-	_d3dDeviceContext->ClearRenderTargetView(renderTarget.Get(), clearColor);
+	_d3dDeviceContext->ClearRenderTargetView(renderTarget.Get(), glm::value_ptr(color));
+}
 
+void Direct3D11Viewport::resize(glm::uvec2 size) {
+	resizeSwapChainIfNecessary(size);
+}
+
+// TODO: properly handle minimized windows
+void Direct3D11Viewport::present(bool waitSync) {
 	_swapChain->Present(waitSync ? 1 : 0, 0);
+}
+
+void Direct3D11Viewport::resizeSwapChainIfNecessary(glm::uvec2 newSize) {
+	if (newSize == _lastSwapChainSize)
+		return;
+
+	_swapChain->ResizeBuffers(0, newSize.x, newSize.y, DXGI_FORMAT_UNKNOWN, 0);
+	_lastSwapChainSize = newSize;
 }
