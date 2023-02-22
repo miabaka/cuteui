@@ -78,16 +78,19 @@ void WindowManager::renderMain() {
 
 		std::shared_ptr<Window> lastActiveWindow = getLastActiveWindow();
 
+		bool waitSync = true;
+
+		if (lastActiveWindow) {
+			lastActiveWindow->present(waitSync);
+			waitSync = false;
+		}
+
 		for (auto &window: windows) {
 			if (window == lastActiveWindow)
 				continue;
 
-			window->present(!lastActiveWindow && window == windows.back());
+			window->present(waitSync && !lastActiveWindow);
+			waitSync = false;
 		}
-
-		if (!lastActiveWindow)
-			continue;
-
-		lastActiveWindow->present(true);
 	}
 }

@@ -150,8 +150,10 @@ LRESULT Win32Window::windowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 			return true;
 
 		case WM_ACTIVATE:
-			if (LOWORD(wParam) != WA_INACTIVE)
+			if (LOWORD(wParam) != WA_INACTIVE) {
 				sFocus.emit();
+				return 0;
+			}
 
 		default:
 			break;
