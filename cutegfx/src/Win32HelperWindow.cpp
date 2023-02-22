@@ -9,7 +9,21 @@
 using namespace cutegfx;
 
 LRESULT Win32HelperWindow::windowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
-	auto *instance = static_cast<Win32HelperWindow *>(GetPropW(window, THIS_PROP_NAME));
+	Win32HelperWindow *instance;
+
+	if (message == WM_NCCREATE) {
+		auto *createStruct = reinterpret_cast<CREATESTRUCT *>(lParam);
+
+		instance = static_cast<Win32HelperWindow *>(createStruct->lpCreateParams);
+		instance->_handle = window;
+
+		SetWindowLongPtrW(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(instance));
+	} else {
+		instance = reinterpret_cast<Win32HelperWindow *>(GetWindowLongPtrW(window, GWLP_USERDATA));
+	}
+
+	if (!instance)
+		return DefWindowProcW(window, message, wParam, lParam);
 
 	switch (message) {
 		case WM_PAINT: {
@@ -20,9 +34,6 @@ LRESULT Win32HelperWindow::windowProc(HWND window, UINT message, WPARAM wParam, 
 		}
 
 		case WM_USER:
-			if (!instance)
-				break;
-
 			if (static_cast<Platform::TickType>(wParam) == Platform::TickType::Update)
 				instance->executeTickHandler();
 			else
@@ -37,12 +48,11 @@ LRESULT Win32HelperWindow::windowProc(HWND window, UINT message, WPARAM wParam, 
 	return DefWindowProcW(window, message, wParam, lParam);
 }
 
-Win32HelperWindow::Win32HelperWindow() : _handle(createWindow()) {
-	SetPropW(_handle, THIS_PROP_NAME, this);
+Win32HelperWindow::Win32HelperWindow() {
+	createWindow();
 }
 
 Win32HelperWindow::~Win32HelperWindow() {
-	RemovePropW(_handle, THIS_PROP_NAME);
 	DestroyWindow(_handle);
 }
 
@@ -61,7 +71,7 @@ void Win32HelperWindow::executeTickHandlerIndirect(Platform::TickType tickType) 
 	SendMessageW(_handle, WM_USER, static_cast<WPARAM>(tickType), 0);
 }
 
-HWND Win32HelperWindow::createWindow() {
+void Win32HelperWindow::createWindow() {
 	HWND handle = CreateWindowExW(
 			0, // exStyle
 			Win32Platform::HELPER_WINDOW_CLASS_NAME,
@@ -72,11 +82,9 @@ HWND Win32HelperWindow::createWindow() {
 			HWND_MESSAGE, // parent
 			nullptr, // menu
 			GetModuleHandleW(nullptr),
-			nullptr // param
+			this // param
 	);
 
 	if (!handle)
 		throw std::runtime_error("CreateWindowExW failed: " + std::to_string(GetLastError()));
-
-	return handle;
 }

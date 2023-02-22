@@ -27,12 +27,10 @@ public:
 	void executeTickHandlerIndirect(Platform::TickType tickType);
 
 private:
-	static constexpr auto THIS_PROP_NAME = L"CuteHelper";
-
-	HWND _handle;
+	HWND _handle{};
 	std::function<void()> _tickHandler;
 
-	static HWND createWindow();
+	void createWindow();
 };
 
 } // namespace cutegfx
