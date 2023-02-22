@@ -16,6 +16,10 @@ Application::Application() {
 		throw std::runtime_error("Multiple Application instances can not exist simultaneously");
 
 	_platform = cutegfx::Platform::createBest();
+
+	if (!_platform)
+		throw std::runtime_error("Failed to create cutegfx platform");
+
 	_instance = this;
 }
 
