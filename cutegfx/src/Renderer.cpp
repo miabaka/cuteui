@@ -17,27 +17,57 @@ std::shared_ptr<Viewport> Renderer::createViewport() {
 }
 
 void Renderer::setViewport(std::shared_ptr<Viewport> viewport) {
-	_commandList.emplace_back(SetViewportRenderCommand{std::move(viewport)});
+	submitCurrentMesh();
+	_commandList.emplace_back(SetViewportCommand{std::move(viewport)});
 }
 
 void Renderer::resize(glm::uvec2 size) {
-	_commandList.emplace_back(ResizeRenderCommand{size});
+	submitCurrentMesh();
+	_commandList.emplace_back(ResizeCommand{size});
 }
 
 void Renderer::clear(glm::vec4 color) {
-	_commandList.emplace_back(ClearRenderCommand{color});
+	submitCurrentMesh();
+	_commandList.emplace_back(ClearCommand{color});
+}
+
+void Renderer::fillRect(glm::vec2 p1, glm::vec2 p2, glm::vec4 color) {
+	MeshBuilder::index_t firstIndex = _meshBuilder.addRect(p1, p2, color);
+
+	if (!_hasIncompleteMesh)
+		_firstIncompleteMeshIndex = firstIndex;
+
+	_hasIncompleteMesh = true;
 }
 
 void Renderer::render() {
+	submitCurrentMesh();
+
 	std::shared_ptr<Viewport> viewport;
 
 	for (auto &command: _commandList) {
 		std::visit(overloaded{
-				[&viewport](SetViewportRenderCommand &setViewport) { viewport = setViewport.viewport; },
-				[&viewport](ClearRenderCommand &clear) { viewport->clear(clear.color); },
-				[&viewport](ResizeRenderCommand &resize) { viewport->resize(resize.size); }
+				[&](SetViewportCommand &cmd) { viewport = cmd.viewport; },
+				[&](ClearCommand &cmd) { viewport->clear(cmd.color); },
+				[&](ResizeCommand &cmd) { viewport->resize(cmd.size); },
+				[&](DrawMeshCommand &cmd) {}
 		}, command);
 	}
 
 	_commandList.clear();
+	_meshBuilder.reset();
+}
+
+void Renderer::submitCurrentMesh() {
+	if (!_hasIncompleteMesh)
+		return;
+
+	_hasIncompleteMesh = false;
+
+	DrawMeshCommand command{};
+
+	command.firstIndex = _firstIncompleteMeshIndex;
+	command.indexCount = _meshBuilder.currentIndex() - command.firstIndex;
+
+	_commandList.emplace_back(command);
 }

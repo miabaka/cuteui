@@ -69,7 +69,11 @@ void Window::updateAndDraw() {
 	renderer.setViewport(_viewport);
 
 	renderer.resize(_platformWindow->getClientSize());
-	renderer.clear({0.75f, 0.5f, 1.f, 0.75f});
+	renderer.clear({0.75f, 0.5f, 1.f, 0.5f});
+
+	renderer.fillRect({10, 10}, {74, 74}, {1.f, 0.f, 0.f, 1.f});
+	renderer.fillRect({20, 20}, {84, 84}, {0.f, 1.f, 0.f, 1.f});
+	renderer.fillRect({30, 30}, {94, 94}, {0.f, 0.f, 1.f, 1.f});
 }
 
 void Window::present(bool waitSync) {
