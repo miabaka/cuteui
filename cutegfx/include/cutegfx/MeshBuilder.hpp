@@ -5,18 +5,20 @@
 
 #include <glm/glm.hpp>
 
-#include "Buffer.hpp"
+#include "Device.hpp"
+
+namespace cutegfx {
 
 class MeshBuilder {
 public:
+	using index_t = Device::index_t;
+
 #pragma pack(push, 1)
 	struct Vertex {
 		glm::vec2 position;
 		glm::vec4 color;
 	};
 #pragma pack(pop)
-
-	using index_t = uint32_t;
 
 	MeshBuilder();
 
@@ -33,12 +35,15 @@ private:
 	std::vector<index_t> _indices;
 	size_t _availableVertices{};
 	index_t _availableIndices{};
+	index_t _currentVertexIndex = 0;
 	index_t _currentIndex = 0;
 
 	index_t emitVertex(const Vertex &vertex);
 
 	template<typename ...TIndices>
-	void emitIndices(const TIndices &...indices) {
+	index_t emitIndices(const TIndices &...indices) {
+		index_t firstIndex = _currentIndex;
+
 		while (_availableIndices < sizeof...(indices)) {
 			_indices.reserve(_indices.capacity() * 2);
 			_availableIndices = _indices.capacity() - _indices.size();
@@ -48,5 +53,10 @@ private:
 			_indices.push_back(index);
 
 		_availableIndices -= sizeof...(indices);
+		_currentIndex += sizeof...(indices);
+
+		return firstIndex;
 	}
 };
+
+} // namespace cutegfx

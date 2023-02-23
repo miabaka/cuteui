@@ -20,6 +20,8 @@ public:
 	virtual void resize(glm::uvec2 size) = 0;
 
 	virtual void present(bool waitSync) = 0;
+
+	virtual void use() = 0;
 };
 
 } // namespace cutegfx

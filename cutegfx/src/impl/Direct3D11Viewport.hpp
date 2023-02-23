@@ -10,6 +10,7 @@
 #include <wrl.h>
 #include <glm/vec2.hpp>
 
+#include "cuteutil/SharedObject.hpp"
 #include "cutegfx/Viewport.hpp"
 #include "Win32Window.hpp"
 
@@ -17,7 +18,7 @@ namespace cutegfx {
 
 class Direct3D11Device;
 
-class Direct3D11Viewport : public Viewport {
+class Direct3D11Viewport : public cuteutil::SharedObject<Direct3D11Viewport>, public Viewport {
 public:
 	explicit Direct3D11Viewport(std::shared_ptr<Direct3D11Device> device);
 
@@ -31,10 +32,13 @@ public:
 
 	void present(bool waitSync) override;
 
+	void use() override;
+
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> _d3dDevice;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> _d3dDeviceContext;
 	Microsoft::WRL::ComPtr<IDXGIFactory2> _dxgiFactory;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> _d3dRenderTarget;
 	Microsoft::WRL::ComPtr<IDCompositionDevice> _compositionDevice;
 	Microsoft::WRL::ComPtr<IDCompositionTarget> _compositionTarget;
 	Microsoft::WRL::ComPtr<IDCompositionVisual> _compositionVisual;
@@ -44,6 +48,8 @@ private:
 	glm::uvec2 _lastSwapChainSize{};
 
 	void resizeSwapChainIfNecessary(glm::uvec2 newSize);
+
+	void createRenderTarget();
 };
 
 } // namespace cutegfx

@@ -18,6 +18,7 @@ if (WIN32)
     target_sources(cutegfx PRIVATE
             src/impl/Direct3D11Buffer.cpp
             src/impl/Direct3D11Device.cpp
+            src/impl/Direct3D11Shader.cpp
             src/impl/Direct3D11Viewport.cpp
             src/impl/Win32HelperWindow.cpp
             src/impl/Win32Platform.cpp

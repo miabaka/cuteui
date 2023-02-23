@@ -3,7 +3,6 @@
 #include <cassert>
 #include <stdexcept>
 
-#include <wrl.h>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Direct3D11Device.hpp"
@@ -29,6 +28,7 @@ void Direct3D11Viewport::setOutputWindow(std::shared_ptr<Window> window) {
 	_outputWindow = std::dynamic_pointer_cast<Win32Window>(window);
 
 	createSwapChain(_outputWindow->getClientSize());
+	createRenderTarget();
 
 	_compositionVisual->SetOffsetX(0.f);
 	_compositionVisual->SetOffsetY(0.f);
@@ -69,14 +69,7 @@ void Direct3D11Viewport::clear(glm::vec4 color) {
 	color.r *= color.a;
 	color.g *= color.a;
 	color.b *= color.a;
-
-	ComPtr<ID3D11Resource> backBuffer;
-	_swapChain->GetBuffer(0, __uuidof(ID3D11Resource), &backBuffer);
-
-	ComPtr<ID3D11RenderTargetView> renderTarget;
-	_d3dDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, &renderTarget);
-
-	_d3dDeviceContext->ClearRenderTargetView(renderTarget.Get(), glm::value_ptr(color));
+	_d3dDeviceContext->ClearRenderTargetView(_d3dRenderTarget.Get(), glm::value_ptr(color));
 }
 
 void Direct3D11Viewport::resize(glm::uvec2 size) {
@@ -88,10 +81,42 @@ void Direct3D11Viewport::present(bool waitSync) {
 	_swapChain->Present(waitSync ? 1 : 0, 0);
 }
 
+void Direct3D11Viewport::use() {
+	_device->setActiveViewport(asShared());
+
+	D3D11_VIEWPORT viewport{};
+
+	viewport.Width = static_cast<float>(_lastSwapChainSize.x);
+	viewport.Height = static_cast<float>(_lastSwapChainSize.y);
+
+	_d3dDeviceContext->RSSetViewports(1, &viewport);
+
+	_d3dDeviceContext->OMSetRenderTargets(1, _d3dRenderTarget.GetAddressOf(), nullptr);
+}
+
 void Direct3D11Viewport::resizeSwapChainIfNecessary(glm::uvec2 newSize) {
 	if (newSize == _lastSwapChainSize)
 		return;
 
+	bool viewportIsActive = _device->isViewportActive(asShared());
+
+	if (viewportIsActive)
+		_d3dDeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
+
+	if (_d3dRenderTarget)
+		_d3dRenderTarget->Release();
+
 	_swapChain->ResizeBuffers(0, newSize.x, newSize.y, DXGI_FORMAT_UNKNOWN, 0);
 	_lastSwapChainSize = newSize;
+
+	if (viewportIsActive) {
+		createRenderTarget();
+		use();
+	}
+}
+
+void Direct3D11Viewport::createRenderTarget() {
+	ComPtr<ID3D11Resource> backBuffer;
+	_swapChain->GetBuffer(0, __uuidof(ID3D11Resource), &backBuffer);
+	_d3dDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, _d3dRenderTarget.GetAddressOf());
 }

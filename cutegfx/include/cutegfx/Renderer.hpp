@@ -9,7 +9,6 @@
 
 #include "Device.hpp"
 #include "MeshBuilder.hpp"
-#include "Viewport.hpp"
 
 namespace cutegfx {
 
@@ -52,6 +51,9 @@ private:
 	std::shared_ptr<Device> _device;
 	std::shared_ptr<Buffer> _vertexBuffer;
 	std::shared_ptr<Buffer> _indexBuffer;
+	std::shared_ptr<Buffer> _constantBuffer;
+	std::shared_ptr<Shader> _vertexShader;
+	std::shared_ptr<Shader> _pixelShader;
 	std::deque<RenderCommand> _commandList;
 	MeshBuilder _meshBuilder;
 	bool _hasIncompleteMesh = false;

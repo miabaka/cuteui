@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include "Direct3D11Buffer.hpp"
+#include "Direct3D11Shader.hpp"
 #include "Direct3D11Viewport.hpp"
 
 using namespace cutegfx;
@@ -13,12 +14,29 @@ Direct3D11Device::Direct3D11Device() {
 	createCompositionDevice();
 }
 
+Shader::Format Direct3D11Device::getShaderFormat() const {
+	return Shader::Format::Hlsl;
+}
+
 std::shared_ptr<Buffer> Direct3D11Device::createBuffer(Buffer::Type type) {
 	return std::make_shared<Direct3D11Buffer>(asShared(), type);
 }
 
+std::shared_ptr<Shader> Direct3D11Device::createShader(Shader::Type type, const void *bytecode, size_t size) {
+	auto *bytecodeBegin = static_cast<const char *>(bytecode);
+	auto *bytecodeEnd = bytecodeBegin + size;
+
+	std::vector<char> bytecodeVec(bytecodeBegin, bytecodeEnd);
+
+	return std::make_shared<Direct3D11Shader>(asShared(), type, std::move(bytecodeVec));
+}
+
 std::shared_ptr<Viewport> Direct3D11Device::createViewport() {
-	return std::make_shared<Direct3D11Viewport>(asShared());
+	return Direct3D11Viewport::create(asShared());
+}
+
+void Direct3D11Device::draw(index_t firstIndex, index_t indexCount) {
+	_deviceContext->DrawIndexed(indexCount, firstIndex, 0);
 }
 
 ComPtr<ID3D11Device> Direct3D11Device::getDevice() {
@@ -37,12 +55,20 @@ ComPtr<IDXGIAdapter> Direct3D11Device::getDxgiAdapter() {
 	return _dxgiAdapter;
 }
 
+void Direct3D11Device::setActiveViewport(std::weak_ptr<Direct3D11Viewport> viewport) {
+	_activeViewport = std::move(viewport);
+}
+
+bool Direct3D11Device::isViewportActive(const std::shared_ptr<Direct3D11Viewport> &viewport) const {
+	return viewport == _activeViewport.lock();
+}
+
 void Direct3D11Device::createDevice() {
 	HRESULT result = D3D11CreateDevice(
 			nullptr, // adapter
 			D3D_DRIVER_TYPE_HARDWARE,
 			nullptr, // software
-			D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+			D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG,
 			nullptr, 0, // featureLevels
 			D3D11_SDK_VERSION,
 			&_device,
