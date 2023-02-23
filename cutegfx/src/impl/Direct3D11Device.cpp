@@ -68,7 +68,7 @@ void Direct3D11Device::createDevice() {
 			nullptr, // adapter
 			D3D_DRIVER_TYPE_HARDWARE,
 			nullptr, // software
-			D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG,
+			D3D11_CREATE_DEVICE_BGRA_SUPPORT,
 			nullptr, 0, // featureLevels
 			D3D11_SDK_VERSION,
 			&_device,
