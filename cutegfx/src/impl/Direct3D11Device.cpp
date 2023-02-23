@@ -1,6 +1,8 @@
 #include "Direct3D11Device.hpp"
 
 #include <stdexcept>
+
+#include "Direct3D11Buffer.hpp"
 #include "Direct3D11Viewport.hpp"
 
 using namespace cutegfx;
@@ -9,6 +11,10 @@ using Microsoft::WRL::ComPtr;
 Direct3D11Device::Direct3D11Device() {
 	createDevice();
 	createCompositionDevice();
+}
+
+std::shared_ptr<Buffer> Direct3D11Device::createBuffer(Buffer::Type type) {
+	return std::make_shared<Direct3D11Buffer>(asShared(), type);
 }
 
 std::shared_ptr<Viewport> Direct3D11Device::createViewport() {

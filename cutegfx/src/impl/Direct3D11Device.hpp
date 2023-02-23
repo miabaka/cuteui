@@ -23,6 +23,8 @@ public:
 
 	~Direct3D11Device() override = default;
 
+	std::shared_ptr<Buffer> createBuffer(Buffer::Type type) override;
+
 	std::shared_ptr<Viewport> createViewport() override;
 
 	Microsoft::WRL::ComPtr<ID3D11Device> getDevice();

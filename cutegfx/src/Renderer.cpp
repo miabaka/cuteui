@@ -9,8 +9,10 @@ struct overloaded : Ts ... {
 
 template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
-Renderer::Renderer(std::shared_ptr<Device> device)
-		: _device(std::move(device)) {}
+Renderer::Renderer(const std::shared_ptr<Device> &device)
+		: _device(device),
+		  _vertexBuffer(device->createBuffer(Buffer::Type::Vertex)),
+		  _indexBuffer(device->createBuffer(Buffer::Type::Index)) {}
 
 std::shared_ptr<Viewport> Renderer::createViewport() {
 	return _device->createViewport();
@@ -42,6 +44,7 @@ void Renderer::fillRect(glm::vec2 p1, glm::vec2 p2, glm::vec4 color) {
 
 void Renderer::render() {
 	submitCurrentMesh();
+	_meshBuilder.uploadAndReset(*_vertexBuffer, *_indexBuffer);
 
 	std::shared_ptr<Viewport> viewport;
 
@@ -55,7 +58,6 @@ void Renderer::render() {
 	}
 
 	_commandList.clear();
-	_meshBuilder.reset();
 }
 
 void Renderer::submitCurrentMesh() {

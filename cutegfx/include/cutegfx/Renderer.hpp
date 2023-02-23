@@ -9,12 +9,13 @@
 
 #include "Device.hpp"
 #include "MeshBuilder.hpp"
+#include "Viewport.hpp"
 
 namespace cutegfx {
 
 class Renderer {
 public:
-	explicit Renderer(std::shared_ptr<Device> device);
+	explicit Renderer(const std::shared_ptr<Device>& device);
 
 	std::shared_ptr<Viewport> createViewport();
 
@@ -49,6 +50,8 @@ private:
 	using RenderCommand = std::variant<SetViewportCommand, ResizeCommand, ClearCommand, DrawMeshCommand>;
 
 	std::shared_ptr<Device> _device;
+	std::shared_ptr<Buffer> _vertexBuffer;
+	std::shared_ptr<Buffer> _indexBuffer;
 	std::deque<RenderCommand> _commandList;
 	MeshBuilder _meshBuilder;
 	bool _hasIncompleteMesh = false;

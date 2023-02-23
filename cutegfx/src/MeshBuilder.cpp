@@ -26,6 +26,12 @@ void MeshBuilder::reset() {
 	_currentIndex = 0;
 }
 
+void MeshBuilder::uploadAndReset(Buffer &vertexBuffer, Buffer &indexBuffer) {
+	vertexBuffer.setData(_vertices.data(), sizeof(Vertex) * _vertices.size());
+	indexBuffer.setData(_indices.data(), sizeof(index_t) * _indices.size());
+	reset();
+}
+
 MeshBuilder::index_t MeshBuilder::currentIndex() const {
 	return _currentIndex;
 }

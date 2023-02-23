@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Buffer.hpp"
+
 class MeshBuilder {
 public:
 #pragma pack(push, 1)
@@ -21,6 +23,8 @@ public:
 	index_t addRect(glm::vec2 p1, glm::vec2 p2, glm::vec4 color);
 
 	void reset();
+
+	void uploadAndReset(Buffer &vertexBuffer, Buffer &indexBuffer);
 
 	index_t currentIndex() const;
 
