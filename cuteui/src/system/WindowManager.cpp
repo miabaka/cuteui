@@ -24,9 +24,6 @@ void WindowManager::unregisterVisibleWindow(std::shared_ptr<Window> window) {
 	if (_lastActiveWindow == window)
 		_lastActiveWindow = nullptr;
 
-	if (!_visibleWindows.empty())
-		return;
-
 	_visibleWindowsChanged = true;
 }
 
