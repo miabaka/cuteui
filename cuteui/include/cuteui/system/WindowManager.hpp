@@ -16,10 +16,6 @@ class WindowManager {
 public:
 	using UpdateType = cutegfx::Platform::TickType;
 
-	void registerWindow(Window *window);
-
-	void unregisterWindow(Window *window);
-
 	void registerVisibleWindow(std::shared_ptr<Window> window);
 
 	void unregisterVisibleWindow(std::shared_ptr<Window> window);
@@ -37,7 +33,6 @@ public:
 	cuteutil::SingleSignal<UpdateType> sUpdate;
 
 private:
-	std::unordered_set<Window *> _windows;
 	std::unordered_set<std::shared_ptr<Window>> _visibleWindows;
 	std::shared_ptr<Window> _lastActiveWindow;
 	std::thread _renderThread;

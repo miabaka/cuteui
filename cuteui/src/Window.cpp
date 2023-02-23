@@ -19,12 +19,9 @@ Window::Window(glm::ivec2 size, const std::string &title) {
 	_viewport = renderer.createViewport();
 
 	_viewport->setOutputWindow(_platformWindow);
-
-	app.getWindowManager().registerWindow(this);
 }
 
 Window::~Window() {
-	Application::getInstance().getWindowManager().unregisterWindow(this);
 	_platformWindow->sVisibilityChange.reset();
 }
 

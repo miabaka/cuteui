@@ -2,14 +2,6 @@
 
 #include "cuteui/Application.hpp"
 
-void WindowManager::registerWindow(Window *window) {
-	_windows.insert(window);
-}
-
-void WindowManager::unregisterWindow(Window *window) {
-	_windows.erase(window);
-}
-
 void WindowManager::registerVisibleWindow(std::shared_ptr<Window> window) {
 	std::scoped_lock lock(_visibleWindowsMutex);
 	_visibleWindows.insert(window);
@@ -38,7 +30,7 @@ void WindowManager::setLastActiveWindow(std::shared_ptr<Window> window) {
 }
 
 void WindowManager::updateWindows() {
-	for (auto &window: _windows)
+	for (auto &window: _visibleWindows)
 		window->updateAndDraw();
 }
 
