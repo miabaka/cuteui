@@ -6,9 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_library(cuteui STATIC
         src/system/WindowManager.cpp
         src/Application.cpp
-        src/Box.cpp
         src/Button.cpp
-        src/Spacer.cpp
+        src/Widget.cpp
         src/Window.cpp)
 
 target_include_directories(cuteui PUBLIC include)

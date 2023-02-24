@@ -78,7 +78,9 @@ void Direct3D11Buffer::setLayout(const std::vector<ElementDesc> &elements, std::
 }
 
 void Direct3D11Buffer::setData(const void *data, size_t size) {
-	if (_size < size)
+	if (size < 1)
+		return;
+	else if (size > _size)
 		createPhysicalBuffer(size);
 
 	D3D11_MAPPED_SUBRESOURCE mapped;

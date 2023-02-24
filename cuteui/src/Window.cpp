@@ -33,6 +33,31 @@ void Window::setVisible(bool visible) {
 	_platformWindow->setVisible(visible);
 }
 
+void Window::updateLayout(glm::ivec2 position, glm::ivec2 maxSize) {
+	_size = maxSize;
+
+	if (!_mainWidget)
+		return;
+
+	_mainWidget->updateLayout(position, maxSize);
+}
+
+void Window::updateLayout() {
+	updateLayout({0, 0}, _platformWindow->getClientSize());
+}
+
+void Window::draw(cutegfx::Renderer &renderer) {
+	renderer.setViewport(_viewport);
+
+	renderer.resize(_size);
+	renderer.clear({1.f, 1.f, 1.f, 1.f});
+
+	if (!_mainWidget)
+		return;
+
+	_mainWidget->draw(renderer);
+}
+
 Window::BackdropType Window::getBackdropType() const {
 	return _platformWindow->getBackdropType();
 }
@@ -56,21 +81,6 @@ void Window::onVisibilityChange(const bool &visible) {
 
 void Window::onFocus() {
 	Application::getInstance().getWindowManager().setLastActiveWindow(asShared());
-}
-
-void Window::updateAndDraw() {
-	cutegfx::Renderer &renderer = Application::getInstance()
-			.getPlatform()
-			.getRenderer();
-
-	renderer.setViewport(_viewport);
-
-	renderer.resize(_platformWindow->getClientSize());
-	renderer.clear({0.75f, 0.5f, 1.f, 0.5f});
-
-	renderer.fillRect({10, 10}, {74, 74}, {1.f, 0.f, 0.f, 1.f});
-	renderer.fillRect({20, 20}, {84, 84}, {0.f, 1.f, 0.f, 1.f});
-	renderer.fillRect({30, 30}, {94, 94}, {0.f, 0.f, 1.f, 1.f});
 }
 
 void Window::present(bool waitSync) {

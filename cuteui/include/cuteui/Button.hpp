@@ -1,14 +1,17 @@
 #pragma once
 
 #include <string>
-
 #include "Widget.hpp"
 
 class Button : public Widget {
 public:
-	Button(const std::string &name);
+	explicit Button(const std::string &name);
 
-	bool isVisible() const override;
+	void updateLayout(glm::ivec2 position, glm::ivec2 maxSize) override;
 
-	void setVisible(bool visible) override;
+	void draw(cutegfx::Renderer &renderer) override;
+
+private:
+	glm::ivec2 _position{};
+	glm::ivec2 _size{};
 };

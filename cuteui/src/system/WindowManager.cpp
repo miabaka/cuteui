@@ -30,8 +30,14 @@ void WindowManager::setLastActiveWindow(std::shared_ptr<Window> window) {
 }
 
 void WindowManager::updateWindows() {
-	for (auto &window: _visibleWindows)
-		window->updateAndDraw();
+	cutegfx::Renderer &renderer = Application::getInstance()
+			.getPlatform()
+			.getRenderer();
+
+	for (auto &window: _visibleWindows) {
+		window->updateLayout();
+		window->draw(renderer);
+	}
 }
 
 void WindowManager::startRenderThread() {
@@ -63,7 +69,7 @@ void WindowManager::renderMain() {
 
 		sUpdate.emit(UpdateType::Update);
 
-		renderer.render();
+ 		renderer.render();
 
 		std::shared_ptr<Window> lastActiveWindow = getLastActiveWindow();
 
