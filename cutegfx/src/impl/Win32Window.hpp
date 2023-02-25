@@ -33,10 +33,20 @@ public:
 	void setVisible(bool visible) override;
 
 private:
+	enum class ResizeState {
+		None,
+		EnteredLoop,
+		Resizing
+	};
+
 	HWND _handle{};
 	BackdropType _backdropType = BackdropType::Default;
+	glm::ivec2 _clientSize{};
+	ResizeState _resizeState = ResizeState::None;
 
 	void createWindow();
+
+	void trySetResizeState(ResizeState state);
 
 	LRESULT CALLBACK windowProc(UINT message, WPARAM wParam, LPARAM lParam);
 

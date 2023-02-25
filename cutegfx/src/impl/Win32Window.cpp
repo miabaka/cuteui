@@ -44,12 +44,12 @@ static glm::ivec2 rectToSize(RECT rect) {
 }
 
 glm::ivec2 Win32Window::getClientSize() const {
-	RECT clientRect;
-	GetClientRect(_handle, &clientRect);
-	return rectToSize(clientRect);
+	return _clientSize;
 }
 
 void Win32Window::setClientSize(glm::ivec2 size) {
+	_clientSize = size;
+
 	RECT windowRect = {0, 0, size.x, size.y};
 	AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, false);
 
@@ -123,6 +123,33 @@ void Win32Window::createWindow() {
 	);
 }
 
+void Win32Window::trySetResizeState(ResizeState state) {
+	if (state == _resizeState)
+		return;
+
+	switch (_resizeState) {
+		case ResizeState::None:
+			if (state != ResizeState::EnteredLoop)
+				return;
+
+			break;
+
+		case ResizeState::EnteredLoop:
+			if (state == ResizeState::Resizing)
+				sResizeBegin.emit();
+
+			break;
+
+		case ResizeState::Resizing:
+			if (state != ResizeState::None)
+				return;
+
+			sResizeEnd.emit();
+	}
+
+	_resizeState = state;
+}
+
 LRESULT Win32Window::windowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_PAINT: {
@@ -154,6 +181,32 @@ LRESULT Win32Window::windowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 				sFocus.emit();
 				return 0;
 			}
+
+		case WM_WINDOWPOSCHANGED: {
+			auto *windowPos = reinterpret_cast<WINDOWPOS *>(lParam);
+
+			if (!windowPos)
+				break;
+
+			if (!(windowPos->flags & (SWP_NOSIZE | SWP_FRAMECHANGED))) {
+				RECT clientRect;
+				GetClientRect(_handle, &clientRect);
+
+				_clientSize = {clientRect.right - clientRect.left, clientRect.bottom - clientRect.top};
+
+				trySetResizeState(ResizeState::Resizing);
+			}
+
+			return 0;
+		}
+
+		case WM_ENTERSIZEMOVE:
+			trySetResizeState(ResizeState::EnteredLoop);
+			return 0;
+
+		case WM_EXITSIZEMOVE:
+			trySetResizeState(ResizeState::None);
+			return 0;
 
 		default:
 			break;

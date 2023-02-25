@@ -40,6 +40,8 @@ public:
 
 	cuteutil::SingleSignal<bool> sVisibilityChange;
 	cuteutil::SingleSignal<> sFocus;
+	cuteutil::SingleSignal<> sResizeBegin;
+	cuteutil::SingleSignal<> sResizeEnd;
 };
 
 } // namespace cutegfx

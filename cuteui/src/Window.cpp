@@ -23,6 +23,9 @@ Window::Window(glm::ivec2 size, const std::string &title) {
 
 Window::~Window() {
 	_platformWindow->sVisibilityChange.reset();
+	_platformWindow->sFocus.reset();
+	_platformWindow->sResizeBegin.reset();
+	_platformWindow->sResizeEnd.reset();
 }
 
 bool Window::isVisible() const {
