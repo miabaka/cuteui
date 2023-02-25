@@ -30,6 +30,8 @@ public:
 
 	void joinRenderThread();
 
+	void setWaitSync(bool waitSync = true);
+
 	cuteutil::SingleSignal<UpdateType> sUpdate;
 
 private:
@@ -39,6 +41,7 @@ private:
 	std::mutex _visibleWindowsMutex;
 	std::mutex _lastActiveWindowMutex;
 	std::atomic<bool> _visibleWindowsChanged = false;
+	std::atomic<bool> _waitSync = true;
 
 	void renderMain();
 };

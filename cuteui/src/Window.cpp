@@ -13,6 +13,14 @@ Window::Window(glm::ivec2 size, const std::string &title) {
 	_platformWindow->sVisibilityChange.bind(&Window::onVisibilityChange, this);
 	_platformWindow->sFocus.bind(&Window::onFocus, this);
 
+	_platformWindow->sResizeBegin.bind([]() {
+		Application::getInstance().getWindowManager().setWaitSync(false);
+	});
+
+	_platformWindow->sResizeEnd.bind([]() {
+		Application::getInstance().getWindowManager().setWaitSync();
+	});
+
 	_platformWindow->setClientSize(size);
 	_platformWindow->setTitle(title);
 

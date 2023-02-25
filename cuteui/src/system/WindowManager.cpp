@@ -48,6 +48,10 @@ void WindowManager::joinRenderThread() {
 	_renderThread.join();
 }
 
+void WindowManager::setWaitSync(bool waitSync) {
+	_waitSync = waitSync;
+}
+
 void WindowManager::renderMain() {
 	cutegfx::Renderer &renderer = Application::getInstance()
 			.getPlatform()
@@ -69,11 +73,11 @@ void WindowManager::renderMain() {
 
 		sUpdate.emit(UpdateType::Update);
 
- 		renderer.render();
+		renderer.render();
 
 		std::shared_ptr<Window> lastActiveWindow = getLastActiveWindow();
 
-		bool waitSync = true;
+		bool waitSync = _waitSync;
 
 		if (lastActiveWindow) {
 			lastActiveWindow->present(waitSync);
