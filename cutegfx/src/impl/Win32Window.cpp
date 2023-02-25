@@ -185,17 +185,15 @@ LRESULT Win32Window::windowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 		case WM_WINDOWPOSCHANGED: {
 			auto *windowPos = reinterpret_cast<WINDOWPOS *>(lParam);
 
-			if (!windowPos)
+			if (!windowPos || windowPos->flags & SWP_NOSIZE)
 				break;
 
-			if (!(windowPos->flags & (SWP_NOSIZE | SWP_FRAMECHANGED))) {
-				RECT clientRect;
-				GetClientRect(_handle, &clientRect);
+			RECT clientRect;
+			GetClientRect(_handle, &clientRect);
 
-				_clientSize = {clientRect.right - clientRect.left, clientRect.bottom - clientRect.top};
+			_clientSize = {clientRect.right - clientRect.left, clientRect.bottom - clientRect.top};
 
-				trySetResizeState(ResizeState::Resizing);
-			}
+			trySetResizeState(ResizeState::Resizing);
 
 			return 0;
 		}
