@@ -8,7 +8,7 @@
 #include <unordered_set>
 
 #include <cutegfx/Platform.hpp>
-#include <cuteutil/SingleSignal.hpp>
+#include <cuteutil/Signal.hpp>
 
 #include "../Window.hpp"
 
@@ -32,7 +32,7 @@ public:
 
 	void setWaitSync(bool waitSync = true);
 
-	cuteutil::SingleSignal<UpdateType> sUpdate;
+	cuteutil::Signal<UpdateType> sUpdate;
 
 private:
 	std::unordered_set<std::shared_ptr<Window>> _visibleWindows;

@@ -3,7 +3,7 @@
 #include <string>
 
 #include <glm/vec2.hpp>
-#include <cuteutil/SingleSignal.hpp>
+#include <cuteutil/Signal.hpp>
 
 namespace cutegfx {
 
@@ -38,10 +38,10 @@ public:
 
 	virtual void setVisible(bool visible) = 0;
 
-	cuteutil::SingleSignal<bool> sVisibilityChange;
-	cuteutil::SingleSignal<> sFocus;
-	cuteutil::SingleSignal<> sResizeBegin;
-	cuteutil::SingleSignal<> sResizeEnd;
+	cuteutil::Signal<bool> sVisibilityChange;
+	cuteutil::Signal<> sFocus;
+	cuteutil::Signal<> sResizeBegin;
+	cuteutil::Signal<> sResizeEnd;
 };
 
 } // namespace cutegfx

@@ -7,13 +7,13 @@
 namespace cuteutil {
 
 template<typename ...TArgs>
-class SingleSignal {
+class Signal {
 public:
-	SingleSignal() = default;
+	Signal() = default;
 
-	SingleSignal(SingleSignal &) = delete;
+	Signal(Signal &) = delete;
 
-	SingleSignal(SingleSignal &&) = delete;
+	Signal(Signal &&) = delete;
 
 	template<typename TClass, typename TClassInstance>
 	void bind(void (TClass::*method)(const TArgs &...), TClassInstance *instance) {
