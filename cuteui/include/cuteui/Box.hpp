@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "Widget.hpp"
 
@@ -13,9 +14,19 @@ class Box : public Widget {
 public:
 	explicit Box(Direction direction = Direction::Horizontal);
 
-	bool isVisible() const override;
+	glm::ivec2 computeRequiredSize() override;
 
-	void setVisible(bool visible) override;
+	void updateLayout(glm::ivec2 position, glm::ivec2 availableSpace) override;
 
-	void add(std::shared_ptr<Widget> widget);
+	void draw(cutegfx::Renderer &renderer) override;
+
+	Direction getDirection() const;
+
+	void setDirection(Direction direction);
+
+	void add(const std::shared_ptr<Widget> &widget);
+
+private:
+	std::vector<std::shared_ptr<Widget>> _children;
+	Direction _direction;
 };

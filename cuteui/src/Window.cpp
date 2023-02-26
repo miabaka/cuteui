@@ -44,13 +44,20 @@ void Window::setVisible(bool visible) {
 	_platformWindow->setVisible(visible);
 }
 
-void Window::updateLayout(glm::ivec2 position, glm::ivec2 maxSize) {
-	_size = maxSize;
+glm::ivec2 Window::computeRequiredSize() {
+	if (!_mainWidget)
+		return {0, 0};
+
+	return _mainWidget->computeRequiredSize();
+}
+
+void Window::updateLayout(glm::ivec2 position, glm::ivec2 availableSpace) {
+	_size = availableSpace;
 
 	if (!_mainWidget)
 		return;
 
-	_mainWidget->updateLayout(position, maxSize);
+	_mainWidget->updateLayout(position, availableSpace);
 }
 
 void Window::updateLayout() {

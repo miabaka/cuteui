@@ -27,7 +27,9 @@ public:
 
 	void setVisible(bool visible) override;
 
-	void updateLayout(glm::ivec2 position, glm::ivec2 maxSize) override;
+	glm::ivec2 computeRequiredSize() override;
+
+	void updateLayout(glm::ivec2 position, glm::ivec2 availableSpace) override;
 
 	void updateLayout();
 

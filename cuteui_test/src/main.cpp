@@ -1,44 +1,28 @@
 #include <cuteui/Application.hpp>
-#include <cuteui/Button.hpp>
+#include <cuteui/Box.hpp>
+#include <cuteui/ColoredThingy.hpp>
 #include <cuteui/Window.hpp>
 
 class MyCuteApp : public Application {
 public:
 	MyCuteApp() {
-//		auto window = Window::create(glm::ivec2{640, 400}, "Мия бака!");
-//		auto secondWindow = Window::create(glm::ivec2{640, 400}, "А может даже ьака");
-//
-//		auto actuallyWorkingButton = std::make_shared<Button>("Мяу");
-//
-//		auto box = std::make_shared<Box>(Direction::Vertical);
-//
-//		box->add(std::make_shared<Spacer>(5));
-//
-//		box->add(std::make_shared<Button>("Сделать кусь"));
-//		box->add(std::make_shared<Button>("Погладить"));
-//		box->add(std::make_shared<Button>("Обнять"));
-//		box->add(std::make_shared<Button>("Отправить в horny jail"));
-//
-//		box->add(std::make_shared<Spacer>(1));
-//
-//		box->add(actuallyWorkingButton);
-//
-//		box->add(std::make_shared<Spacer>(5));
-//
-//		window->setMainWidget(box);
-//
-//		window->setVisible(true);
-//		secondWindow->setVisible(true);
+		auto row = std::make_shared<Box>(Direction::Horizontal);
+
+		row->add(std::make_shared<ColoredThingy>(glm::vec4{1.f, 0.f, 0.f, 1.f}));
+		row->add(std::make_shared<ColoredThingy>(glm::vec4{0.f, 1.f, 0.f, 1.f}));
+
+		auto column = std::make_shared<Box>(Direction::Vertical);
+
+		column->setHorizontalAlignment(Alignment::Center);
+		column->setVerticalAlignment(Alignment::Center);
+
+		column->add(std::make_shared<ColoredThingy>(glm::vec4{0.75f, 0.5f, 1.f, 1.f}));
+		column->add(row);
+		column->add(std::make_shared<ColoredThingy>(glm::vec4{0.f, 0.f, 1.f, 1.f}));
 
 		auto window = Window::create(glm::ivec2{640, 400}, "Мия пишет гуи");
 
-		auto button = std::make_shared<Button>("Ьака фто ли?");
-
-		button->setHorizontalAlignment(Alignment::Center);
-		button->setVerticalAlignment(Alignment::Center);
-
-		window->setMainWidget(button);
-
+		window->setMainWidget(column);
 		window->setVisible(true);
 	}
 };

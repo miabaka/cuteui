@@ -23,3 +23,54 @@ Alignment Widget::getVerticalAlignment() const {
 void Widget::setVerticalAlignment(Alignment alignment) {
 	_verticalAlignment = alignment;
 }
+
+glm::ivec2 Widget::getActualSize() const {
+	return _size;
+}
+
+glm::ivec2 Widget::getPosition() const {
+	return _position;
+}
+
+template<typename T>
+struct AlignAxisOut {
+	T newPosition;
+	T newActualSize;
+};
+
+template<int TAxis, typename T = glm::ivec2, typename Te=int>
+static AlignAxisOut<Te> alignAxis(Alignment alignment, T &position_, T &available_, T &required_) {
+	auto position = position_[TAxis];
+	auto availableSpace = available_[TAxis];
+	auto requiredSize = required_[TAxis];
+
+	AlignAxisOut<Te> out{};
+
+	out.newPosition = position;
+	out.newActualSize = (alignment == Alignment::Fill) ? availableSpace : requiredSize;
+
+	if (alignment == Alignment::Center)
+		out.newPosition += (availableSpace - requiredSize) / 2;
+	else if (alignment == Alignment::End)
+		out.newPosition += availableSpace - requiredSize;
+
+	return out;
+}
+
+void Widget::updateLayout(glm::ivec2 position, glm::ivec2 availableSpace) {
+	glm::ivec2 requiredSize = computeRequiredSize();
+
+	auto x = alignAxis<0>(getHorizontalAlignment(), position, availableSpace, requiredSize);
+	auto y = alignAxis<1>(getVerticalAlignment(), position, availableSpace, requiredSize);
+
+	setPosition({x.newPosition, y.newPosition});
+	setActualSize({x.newActualSize, y.newActualSize});
+}
+
+void Widget::setActualSize(glm::ivec2 size) {
+	_size = size;
+}
+
+void Widget::setPosition(glm::ivec2 position) {
+	_position = position;
+}
