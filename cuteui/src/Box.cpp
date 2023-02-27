@@ -25,16 +25,23 @@ void Box::updateLayout(glm::ivec2 position, glm::ivec2 availableSpace) {
 	Widget::updateLayout(position, availableSpace);
 
 	glm::ivec2 cursor = getPosition();
+	glm::ivec2 requiredSize = computeRequiredSize();
 
 	for (auto &child: _children) {
 		glm::ivec2 size = child->computeRequiredSize();
+		glm::ivec2 advance{};
+
+		if (_direction == Direction::Horizontal) {
+			advance.x = size.x;
+			size.y = (getVerticalAlignment() == Alignment::Fill) ? availableSpace.y : requiredSize.y;
+		} else {
+			size.x = (getHorizontalAlignment() == Alignment::Fill) ? availableSpace.x : requiredSize.x;
+			advance.y = size.y;
+		}
 
 		child->updateLayout(cursor, size);
 
-		if (_direction == Direction::Horizontal)
-			cursor.x += size.x;
-		else
-			cursor.y += size.y;
+		cursor += advance;
 	}
 }
 
