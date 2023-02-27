@@ -20,6 +20,9 @@ public:
 
 	void draw(cutegfx::Renderer &renderer) override;
 
+	std::shared_ptr<Widget>
+	getWidgetAtPoint(glm::ivec2 point, const std::shared_ptr<Widget> &defaultWidget) const override;
+
 	Direction getDirection() const;
 
 	void setDirection(Direction direction);

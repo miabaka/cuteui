@@ -42,6 +42,8 @@ public:
 	cuteutil::Signal<> sFocus;
 	cuteutil::Signal<> sResizeBegin;
 	cuteutil::Signal<> sResizeEnd;
+	cuteutil::Signal<glm::ivec2> sMousePress;
+	cuteutil::Signal<glm::ivec2> sMouseRelease;
 };
 
 } // namespace cutegfx

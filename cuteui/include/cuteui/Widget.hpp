@@ -36,6 +36,15 @@ public:
 
 	virtual void draw(cutegfx::Renderer &renderer) = 0;
 
+	virtual bool containsPoint(glm::ivec2 point) const;
+
+	virtual std::shared_ptr<Widget>
+	getWidgetAtPoint(glm::ivec2 point, const std::shared_ptr<Widget> &defaultWidget) const;
+
+	virtual void onMousePress(glm::ivec2 position);
+
+	virtual void onMouseRelease(glm::ivec2 position);
+
 protected:
 	virtual void setActualSize(glm::ivec2 size);
 

@@ -67,6 +67,24 @@ void Widget::updateLayout(glm::ivec2 position, glm::ivec2 availableSpace) {
 	setActualSize({x.newActualSize, y.newActualSize});
 }
 
+bool Widget::containsPoint(glm::ivec2 point) const {
+	glm::ivec2 p1 = getPosition();
+	glm::ivec2 p2 = p1 + getActualSize();
+	return point.x >= p1.x && point.x < p2.x && point.y >= p1.y && point.y < p2.y;
+}
+
+std::shared_ptr<Widget>
+Widget::getWidgetAtPoint(glm::ivec2 point, const std::shared_ptr<Widget> &defaultWidget) const {
+	if (!containsPoint(point))
+		return nullptr;
+	
+	return defaultWidget;
+}
+
+void Widget::onMousePress(glm::ivec2 position) {}
+
+void Widget::onMouseRelease(glm::ivec2 position) {}
+
 void Widget::setActualSize(glm::ivec2 size) {
 	_size = size;
 }

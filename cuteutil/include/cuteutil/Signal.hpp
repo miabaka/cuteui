@@ -16,7 +16,14 @@ public:
 	Signal(Signal &&) = delete;
 
 	template<typename TClass, typename TClassInstance>
-	void bind(void (TClass::*method)(const TArgs &...), TClassInstance *instance) {
+	void bind(void (TClass::*method)(const TArgs ...), TClassInstance *instance) {
+		_handler = [instance, method](const TArgs ...args) {
+			std::invoke(method, instance, args...);
+		};
+	}
+
+	template<typename TClass, typename TClassInstance>
+	void bindRef(void (TClass::*method)(const TArgs &...), TClassInstance *instance) {
 		_handler = [instance, method](const TArgs &...args) {
 			std::invoke(method, instance, args...);
 		};
@@ -30,7 +37,7 @@ public:
 		_handler = {};
 	}
 
-	void emit(const TArgs &...args) {
+	void operator()(const TArgs &...args) {
 		if (!_handler)
 			return;
 

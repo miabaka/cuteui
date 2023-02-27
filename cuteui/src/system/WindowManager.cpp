@@ -67,11 +67,11 @@ void WindowManager::renderMain() {
 		}
 
 		if (windows.empty()) {
-			sUpdate.emit(UpdateType::EventLoopStopRequest);
+			sUpdate(UpdateType::EventLoopStopRequest);
 			break;
 		}
 
-		sUpdate.emit(UpdateType::Update);
+		sUpdate(UpdateType::Update);
 
 		renderer.render();
 

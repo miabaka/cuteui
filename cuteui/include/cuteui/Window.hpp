@@ -35,6 +35,13 @@ public:
 
 	void draw(cutegfx::Renderer &renderer) override;
 
+	std::shared_ptr<Widget>
+	getWidgetAtPoint(glm::ivec2 point, const std::shared_ptr<Widget> &defaultWidget) const override;
+
+	void onMousePress(glm::ivec2 position) override;
+
+	void onMouseRelease(glm::ivec2 position) override;
+
 	BackdropType getBackdropType() const;
 
 	bool setBackdropType(BackdropType backdropType);
@@ -45,9 +52,10 @@ private:
 	std::shared_ptr<cutegfx::Window> _platformWindow;
 	std::shared_ptr<cutegfx::Viewport> _viewport;
 	std::shared_ptr<Widget> _mainWidget;
-	glm::vec2 _size{};
+	glm::vec2 _viewportSize{};
+	std::shared_ptr<Widget> _pressedWidget;
 
-	void onVisibilityChange(const bool &visible);
+	void onVisibilityChange(bool visible);
 
 	void onFocus();
 

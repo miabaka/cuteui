@@ -1,7 +1,10 @@
 #include "Win32Window.hpp"
 
+#include <windowsx.h>
+
 #include <string>
 #include <dwmapi.h>
+
 #include "Win32Platform.hpp"
 
 using namespace cutegfx;
@@ -136,7 +139,7 @@ void Win32Window::trySetResizeState(ResizeState state) {
 
 		case ResizeState::EnteredLoop:
 			if (state == ResizeState::Resizing)
-				sResizeBegin.emit();
+				sResizeBegin();
 
 			break;
 
@@ -144,7 +147,7 @@ void Win32Window::trySetResizeState(ResizeState state) {
 			if (state != ResizeState::None)
 				return;
 
-			sResizeEnd.emit();
+			sResizeEnd();
 	}
 
 	_resizeState = state;
@@ -164,7 +167,7 @@ LRESULT Win32Window::windowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 			return 0;
 
 		case WM_SHOWWINDOW:
-			sVisibilityChange.emit(wParam);
+			sVisibilityChange(wParam);
 			return 0;
 
 		case WM_SYSCOMMAND:
@@ -177,10 +180,10 @@ LRESULT Win32Window::windowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 			return true;
 
 		case WM_ACTIVATE:
-			if (LOWORD(wParam) != WA_INACTIVE) {
-				sFocus.emit();
-				return 0;
-			}
+			if (LOWORD(wParam) != WA_INACTIVE)
+				sFocus();
+
+			return 0;
 
 		case WM_WINDOWPOSCHANGED: {
 			auto *windowPos = reinterpret_cast<WINDOWPOS *>(lParam);
@@ -204,6 +207,16 @@ LRESULT Win32Window::windowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 
 		case WM_EXITSIZEMOVE:
 			trySetResizeState(ResizeState::None);
+			return 0;
+
+		case WM_LBUTTONDOWN:
+			SetCapture(_handle);
+			sMousePress({GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)});
+			return 0;
+
+		case WM_LBUTTONUP:
+			ReleaseCapture();
+			sMouseRelease({GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)});
 			return 0;
 
 		default:

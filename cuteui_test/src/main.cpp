@@ -1,30 +1,28 @@
 #include <cuteui/Application.hpp>
 #include <cuteui/Box.hpp>
-#include <cuteui/ColoredThingy.hpp>
+#include <cuteui/Button.hpp>
 #include <cuteui/Window.hpp>
 
 class MyCuteApp : public Application {
 public:
-	MyCuteApp() {
-		auto row = std::make_shared<Box>(Direction::Horizontal);
+	MyCuteApp() : _toggleableWindow(Window::create(glm::ivec2{256, 256}, "Я ьака")) {
+		auto button = std::make_shared<Button>();
 
-		row->add(std::make_shared<ColoredThingy>(glm::vec4{1.f, 0.f, 0.f, 1.f}));
-		row->add(std::make_shared<ColoredThingy>(glm::vec4{0.f, 1.f, 0.f, 1.f}));
+		button->setHorizontalAlignment(Alignment::Center);
+		button->setVerticalAlignment(Alignment::Center);
 
-		auto column = std::make_shared<Box>(Direction::Vertical);
-
-		column->setHorizontalAlignment(Alignment::Center);
-		column->setVerticalAlignment(Alignment::Center);
-
-		column->add(std::make_shared<ColoredThingy>(glm::vec4{0.75f, 0.5f, 1.f, 1.f}));
-		column->add(row);
-		column->add(std::make_shared<ColoredThingy>(glm::vec4{0.f, 0.f, 1.f, 1.f}));
+		button->sClick.bind([&]() {
+			_toggleableWindow->setVisible(!_toggleableWindow->isVisible());
+		});
 
 		auto window = Window::create(glm::ivec2{640, 400}, "Мия пишет гуи");
 
-		window->setMainWidget(column);
+		window->setMainWidget(button);
 		window->setVisible(true);
 	}
+
+private:
+	std::shared_ptr<Window> _toggleableWindow;
 };
 
 int main() {

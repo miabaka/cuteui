@@ -7,7 +7,7 @@ add_library(cuteui STATIC
         include/cuteui/system/WindowManager.hpp
         include/cuteui/Application.hpp
         include/cuteui/Box.hpp
-        include/cuteui/ColoredThingy.hpp
+        include/cuteui/Button.hpp
         include/cuteui/Grid.hpp
         include/cuteui/LayerBox.hpp
         include/cuteui/Spacer.hpp
@@ -16,7 +16,7 @@ add_library(cuteui STATIC
         src/system/WindowManager.cpp
         src/Application.cpp
         src/Box.cpp
-        src/ColoredThingy.cpp
+        src/Button.cpp
         src/Widget.cpp
         src/Window.cpp)
 

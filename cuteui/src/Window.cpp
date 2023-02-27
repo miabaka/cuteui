@@ -12,6 +12,8 @@ Window::Window(glm::ivec2 size, const std::string &title) {
 
 	_platformWindow->sVisibilityChange.bind(&Window::onVisibilityChange, this);
 	_platformWindow->sFocus.bind(&Window::onFocus, this);
+	_platformWindow->sMousePress.bind(&Window::onMousePress, this);
+	_platformWindow->sMouseRelease.bind(&Window::onMouseRelease, this);
 
 	_platformWindow->sResizeBegin.bind([]() {
 		Application::getInstance().getWindowManager().setWaitSync(false);
@@ -34,6 +36,8 @@ Window::~Window() {
 	_platformWindow->sFocus.reset();
 	_platformWindow->sResizeBegin.reset();
 	_platformWindow->sResizeEnd.reset();
+	_platformWindow->sMousePress.reset();
+	_platformWindow->sMouseRelease.reset();
 }
 
 bool Window::isVisible() const {
@@ -52,7 +56,7 @@ glm::ivec2 Window::computeRequiredSize() {
 }
 
 void Window::updateLayout(glm::ivec2 position, glm::ivec2 availableSpace) {
-	_size = availableSpace;
+	_viewportSize = availableSpace;
 
 	if (!_mainWidget)
 		return;
@@ -67,13 +71,48 @@ void Window::updateLayout() {
 void Window::draw(cutegfx::Renderer &renderer) {
 	renderer.setViewport(_viewport);
 
-	renderer.resize(_size);
+	renderer.resize(_viewportSize);
 	renderer.clear({1.f, 1.f, 1.f, 1.f});
 
 	if (!_mainWidget)
 		return;
 
 	_mainWidget->draw(renderer);
+}
+
+std::shared_ptr<Widget>
+Window::getWidgetAtPoint(glm::ivec2 point, const std::shared_ptr<Widget> &defaultWidget) const {
+	if (!_mainWidget)
+		return nullptr;
+
+	return _mainWidget->getWidgetAtPoint(point, _mainWidget);
+}
+
+void Window::onMousePress(glm::ivec2 position) {
+	std::shared_ptr<Widget> widgetUnderCursor = getWidgetAtPoint(position, nullptr);
+
+	if (!widgetUnderCursor)
+		return;
+
+	widgetUnderCursor->onMousePress(position);
+
+	_pressedWidget = widgetUnderCursor;
+}
+
+void Window::onMouseRelease(glm::ivec2 position) {
+	std::shared_ptr<Widget> pressedWidget = nullptr;
+
+	if (_pressedWidget) {
+		_pressedWidget->onMouseRelease(position);
+		std::swap(pressedWidget, _pressedWidget);
+	}
+
+	std::shared_ptr<Widget> widgetUnderCursor = getWidgetAtPoint(position, nullptr);
+
+	if (!(widgetUnderCursor && widgetUnderCursor != pressedWidget))
+		return;
+
+	widgetUnderCursor->onMouseRelease(position);
 }
 
 Window::BackdropType Window::getBackdropType() const {
@@ -88,7 +127,7 @@ void Window::setMainWidget(std::shared_ptr<Widget> widget) {
 	_mainWidget = std::move(widget);
 }
 
-void Window::onVisibilityChange(const bool &visible) {
+void Window::onVisibilityChange(bool visible) {
 	auto &wm = Application::getInstance().getWindowManager();
 
 	if (visible)

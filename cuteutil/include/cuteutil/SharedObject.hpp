@@ -16,7 +16,7 @@ public:
 		return object;
 	}
 
-	std::shared_ptr<T> asShared() {
+	std::shared_ptr<T> asShared() const {
 		if (_weakThis.expired())
 			throw std::runtime_error("Derived from SharedObject objects must be instantiated with ::create()");
 
