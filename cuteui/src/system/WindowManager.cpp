@@ -2,13 +2,13 @@
 
 #include "cuteui/Application.hpp"
 
-void WindowManager::registerVisibleWindow(std::shared_ptr<Window> window) {
+void WindowManager::registerVisibleWindow(const ctl::RcPtr<Window> &window) {
 	std::scoped_lock lock(_visibleWindowsMutex);
-	_visibleWindows.insert(window);
+	_visibleWindows.emplace(window);
 	_visibleWindowsChanged = true;
 }
 
-void WindowManager::unregisterVisibleWindow(std::shared_ptr<Window> window) {
+void WindowManager::unregisterVisibleWindow(const ctl::RcPtr<Window> &window) {
 	std::scoped_lock lock(_visibleWindowsMutex);
 
 	_visibleWindows.erase(window);
@@ -19,14 +19,14 @@ void WindowManager::unregisterVisibleWindow(std::shared_ptr<Window> window) {
 	_visibleWindowsChanged = true;
 }
 
-std::shared_ptr<Window> WindowManager::getLastActiveWindow() {
+ctl::RcPtr<Window> WindowManager::getLastActiveWindow() {
 	std::scoped_lock lock(_lastActiveWindowMutex);
 	return _lastActiveWindow;
 }
 
-void WindowManager::setLastActiveWindow(std::shared_ptr<Window> window) {
+void WindowManager::setLastActiveWindow(const ctl::RcPtr<Window> &window) {
 	std::scoped_lock lock(_lastActiveWindowMutex);
-	_lastActiveWindow = std::move(window);
+	_lastActiveWindow = window;
 }
 
 void WindowManager::updateWindows() {
@@ -57,7 +57,7 @@ void WindowManager::renderMain() {
 			.getPlatform()
 			.getRenderer();
 
-	std::vector<std::shared_ptr<Window>> windows;
+	std::vector<ctl::RcPtr<Window>> windows;
 
 	while (true) {
 		if (_visibleWindowsChanged) {
@@ -75,7 +75,7 @@ void WindowManager::renderMain() {
 
 		renderer.render();
 
-		std::shared_ptr<Window> lastActiveWindow = getLastActiveWindow();
+		ctl::RcPtr<Window> lastActiveWindow = getLastActiveWindow();
 
 		bool waitSync = _waitSync;
 

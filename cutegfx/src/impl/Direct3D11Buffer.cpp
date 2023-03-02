@@ -8,8 +8,8 @@
 using namespace cutegfx;
 using Microsoft::WRL::ComPtr;
 
-Direct3D11Buffer::Direct3D11Buffer(std::shared_ptr<Direct3D11Device> device, Buffer::Type type)
-		: _device(std::move(device)),
+Direct3D11Buffer::Direct3D11Buffer(const ctl::RcPtr<Direct3D11Device> &device, Buffer::Type type)
+		: _device(device),
 		  _type(type) {
 	_d3dDevice = _device->getDevice();
 	_d3dContext = _device->getDeviceContext();
@@ -41,7 +41,7 @@ static size_t mapElementTypeToSize(Buffer::ElementType type) {
 	}
 }
 
-void Direct3D11Buffer::setLayout(const std::vector<ElementDesc> &elements, std::shared_ptr<Shader> vertexShader) {
+void Direct3D11Buffer::setLayout(const std::vector<ElementDesc> &elements, ctl::RcPtr<Shader> vertexShader) {
 	if (vertexShader->getType() != Shader::Type::Vertex)
 		throw std::invalid_argument("Shader must be vertex");
 

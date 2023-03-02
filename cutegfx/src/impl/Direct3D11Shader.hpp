@@ -9,6 +9,7 @@
 #include <windows.h>
 #include <wrl.h>
 #include <d3d11.h>
+#include <ctl/memory.hpp>
 
 #include "cutegfx/Shader.hpp"
 
@@ -18,7 +19,7 @@ class Direct3D11Device;
 
 class Direct3D11Shader : public Shader {
 public:
-	explicit Direct3D11Shader(std::shared_ptr<Direct3D11Device> device, Type type, std::vector<char> &&bytecode);
+	Direct3D11Shader(const ctl::RcPtr<Direct3D11Device> &device, Type type, std::vector<char> &&bytecode);
 
 	Format getFormat() const override;
 
@@ -31,7 +32,7 @@ public:
 	void use() override;
 
 private:
-	std::shared_ptr<Direct3D11Device> _device;
+	ctl::RcPtr<Direct3D11Device> _device;
 	std::vector<char> _bytecode;
 	Type _type;
 	Microsoft::WRL::ComPtr<ID3D11Device> _d3dDevice;

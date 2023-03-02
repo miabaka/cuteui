@@ -1,24 +1,24 @@
 #pragma once
 
 #include <deque>
-#include <memory>
 #include <variant>
 #include <vector>
 
 #include <glm/vec4.hpp>
+#include <ctl/memory.hpp>
 
 #include "Device.hpp"
 #include "MeshBuilder.hpp"
 
 namespace cutegfx {
 
-class Renderer {
+class Renderer : public ctl::RcObject {
 public:
-	explicit Renderer(const std::shared_ptr<Device>& device);
+	explicit Renderer(const ctl::RcPtr<Device> &device);
 
-	std::shared_ptr<Viewport> createViewport();
+	ctl::RcPtr<Viewport> createViewport();
 
-	void setViewport(std::shared_ptr<Viewport> viewport);
+	void setViewport(const ctl::RcPtr<Viewport> &viewport);
 
 	void resize(glm::uvec2 size);
 
@@ -30,7 +30,7 @@ public:
 
 private:
 	struct SetViewportCommand {
-		std::shared_ptr<Viewport> viewport;
+		ctl::RcPtr<Viewport> viewport;
 	};
 
 	struct ResizeCommand {
@@ -48,12 +48,12 @@ private:
 
 	using RenderCommand = std::variant<SetViewportCommand, ResizeCommand, ClearCommand, DrawMeshCommand>;
 
-	std::shared_ptr<Device> _device;
-	std::shared_ptr<Buffer> _vertexBuffer;
-	std::shared_ptr<Buffer> _indexBuffer;
-	std::shared_ptr<Buffer> _constantBuffer;
-	std::shared_ptr<Shader> _vertexShader;
-	std::shared_ptr<Shader> _pixelShader;
+	ctl::RcPtr<Device> _device;
+	ctl::RcPtr<Buffer> _vertexBuffer;
+	ctl::RcPtr<Buffer> _indexBuffer;
+	ctl::RcPtr<Buffer> _constantBuffer;
+	ctl::RcPtr<Shader> _vertexShader;
+	ctl::RcPtr<Shader> _pixelShader;
 	std::deque<RenderCommand> _commandList;
 	MeshBuilder _meshBuilder;
 	bool _hasIncompleteMesh = false;

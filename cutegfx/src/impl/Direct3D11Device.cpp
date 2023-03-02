@@ -18,21 +18,21 @@ Shader::Format Direct3D11Device::getShaderFormat() const {
 	return Shader::Format::Hlsl;
 }
 
-std::shared_ptr<Buffer> Direct3D11Device::createBuffer(Buffer::Type type) {
-	return std::make_shared<Direct3D11Buffer>(asShared(), type);
+ctl::RcPtr<Buffer> Direct3D11Device::createBuffer(Buffer::Type type) {
+	return ctl::RcPtr<Direct3D11Buffer>::create(this, type);
 }
 
-std::shared_ptr<Shader> Direct3D11Device::createShader(Shader::Type type, const void *bytecode, size_t size) {
+ctl::RcPtr<Shader> Direct3D11Device::createShader(Shader::Type type, const void *bytecode, size_t size) {
 	auto *bytecodeBegin = static_cast<const char *>(bytecode);
 	auto *bytecodeEnd = bytecodeBegin + size;
 
 	std::vector<char> bytecodeVec(bytecodeBegin, bytecodeEnd);
 
-	return std::make_shared<Direct3D11Shader>(asShared(), type, std::move(bytecodeVec));
+	return ctl::RcPtr<Direct3D11Shader>::create(this, type, std::move(bytecodeVec));
 }
 
-std::shared_ptr<Viewport> Direct3D11Device::createViewport() {
-	return Direct3D11Viewport::create(asShared());
+ctl::RcPtr<Viewport> Direct3D11Device::createViewport() {
+	return ctl::RcPtr<Direct3D11Viewport>::create(this);
 }
 
 void Direct3D11Device::draw(index_t firstIndex, index_t indexCount) {
@@ -55,11 +55,11 @@ ComPtr<IDXGIAdapter> Direct3D11Device::getDxgiAdapter() {
 	return _dxgiAdapter;
 }
 
-void Direct3D11Device::setActiveViewport(std::weak_ptr<Direct3D11Viewport> viewport) {
-	_activeViewport = std::move(viewport);
+void Direct3D11Device::setActiveViewport(const ctl::RcPtr<Direct3D11Viewport> &viewport) {
+	_activeViewport = viewport;
 }
 
-bool Direct3D11Device::isViewportActive(const std::shared_ptr<Direct3D11Viewport> &viewport) const {
+bool Direct3D11Device::isViewportActive(const ctl::RcPtr<Direct3D11Viewport> &viewport) const {
 	return viewport == _activeViewport.lock();
 }
 

@@ -10,22 +10,22 @@
 using namespace cutegfx;
 using Microsoft::WRL::ComPtr;
 
-Direct3D11Viewport::Direct3D11Viewport(std::shared_ptr<Direct3D11Device> device)
-		: _device(std::move(device)) {
-	_d3dDevice = _device->getDevice();
-	_d3dDeviceContext = _device->getDeviceContext();
-	_compositionDevice = _device->getCompositionDevice();
+Direct3D11Viewport::Direct3D11Viewport(const ctl::RcPtr<Direct3D11Device> &device)
+		: _device(device) {
+	_d3dDevice = device->getDevice();
+	_d3dDeviceContext = device->getDeviceContext();
+	_compositionDevice = device->getCompositionDevice();
 
-	_device->getDxgiAdapter()->GetParent(__uuidof(IDXGIFactory2), &_dxgiFactory);
+	device->getDxgiAdapter()->GetParent(__uuidof(IDXGIFactory2), &_dxgiFactory);
 
 	_compositionDevice->CreateVisual(&_compositionVisual);
 }
 
-void Direct3D11Viewport::setOutputWindow(std::shared_ptr<Window> window) {
+void Direct3D11Viewport::setOutputWindow(const ctl::RcPtr<Window> &window) {
 	// TODO: properly handle window changing
 	assert(window && !_outputWindow);
 
-	_outputWindow = std::dynamic_pointer_cast<Win32Window>(window);
+	_outputWindow = window.dynamicCast<Win32Window>();
 
 	createSwapChain(_outputWindow->getClientSize());
 	createRenderTarget();
@@ -82,7 +82,7 @@ void Direct3D11Viewport::present(bool waitSync) {
 }
 
 void Direct3D11Viewport::use() {
-	_device->setActiveViewport(asShared());
+	_device->setActiveViewport(this);
 
 	D3D11_VIEWPORT viewport{};
 
@@ -98,7 +98,7 @@ void Direct3D11Viewport::resizeSwapChainIfNecessary(glm::uvec2 newSize) {
 	if (newSize == _lastSwapChainSize)
 		return;
 
-	bool viewportIsActive = _device->isViewportActive(asShared());
+	bool viewportIsActive = _device->isViewportActive(this);
 
 	if (viewportIsActive)
 		_d3dDeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
@@ -109,10 +109,11 @@ void Direct3D11Viewport::resizeSwapChainIfNecessary(glm::uvec2 newSize) {
 	_swapChain->ResizeBuffers(0, newSize.x, newSize.y, DXGI_FORMAT_UNKNOWN, 0);
 	_lastSwapChainSize = newSize;
 
-	if (viewportIsActive) {
-		createRenderTarget();
-		use();
-	}
+	if (!viewportIsActive)
+		return;
+
+	createRenderTarget();
+	use();
 }
 
 void Direct3D11Viewport::createRenderTarget() {

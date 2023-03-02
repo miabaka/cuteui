@@ -1,13 +1,14 @@
 #pragma once
 
 #include <string>
+#include <ctl/memory.hpp>
 
 #include <glm/vec2.hpp>
-#include <cuteutil/Signal.hpp>
+#include <ctl/Signal.hpp>
 
 namespace cutegfx {
 
-class Window {
+class Window : public ctl::RcObject {
 public:
 	enum class BackdropType {
 		Default,
@@ -21,8 +22,6 @@ public:
 		WithoutCaption,
 		Borderless
 	};
-
-	virtual ~Window() = default;
 
 	virtual glm::ivec2 getClientSize() const = 0;
 
@@ -38,12 +37,12 @@ public:
 
 	virtual void setVisible(bool visible) = 0;
 
-	cuteutil::Signal<bool> sVisibilityChange;
-	cuteutil::Signal<> sFocus;
-	cuteutil::Signal<> sResizeBegin;
-	cuteutil::Signal<> sResizeEnd;
-	cuteutil::Signal<glm::ivec2> sMousePress;
-	cuteutil::Signal<glm::ivec2> sMouseRelease;
+	ctl::Signal<bool> sVisibilityChange;
+	ctl::Signal<> sFocus;
+	ctl::Signal<> sResizeBegin;
+	ctl::Signal<> sResizeEnd;
+	ctl::Signal<glm::ivec2> sMousePress;
+	ctl::Signal<glm::ivec2> sMouseRelease;
 };
 
 } // namespace cutegfx

@@ -4,6 +4,7 @@
 
 #include <d3d11.h>
 #include <wrl.h>
+#include <ctl/memory.hpp>
 
 #include "cutegfx/Buffer.hpp"
 #include "Direct3D11Device.hpp"
@@ -12,9 +13,9 @@ namespace cutegfx {
 
 class Direct3D11Buffer : public Buffer {
 public:
-	explicit Direct3D11Buffer(std::shared_ptr<Direct3D11Device> device, Buffer::Type type);
+	Direct3D11Buffer(const ctl::RcPtr<Direct3D11Device> &device, Buffer::Type type);
 
-	void setLayout(const std::vector<ElementDesc> &elements, std::shared_ptr<Shader> vertexShader) override;
+	void setLayout(const std::vector<ElementDesc> &elements, ctl::RcPtr<Shader> vertexShader) override;
 
 	void setData(const void *data, size_t size) override;
 
@@ -22,7 +23,7 @@ public:
 
 private:
 	Type _type;
-	std::shared_ptr<Direct3D11Device> _device;
+	ctl::RcPtr<Direct3D11Device> _device;
 	Microsoft::WRL::ComPtr<ID3D11Device> _d3dDevice;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> _d3dContext;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> _d3dBuffer;

@@ -73,12 +73,11 @@ bool Widget::containsPoint(glm::ivec2 point) const {
 	return point.x >= p1.x && point.x < p2.x && point.y >= p1.y && point.y < p2.y;
 }
 
-std::shared_ptr<Widget>
-Widget::getWidgetAtPoint(glm::ivec2 point, const std::shared_ptr<Widget> &defaultWidget) const {
+ctl::RcPtr<Widget> Widget::getWidgetAtPoint(glm::ivec2 point) {
 	if (!containsPoint(point))
 		return nullptr;
-	
-	return defaultWidget;
+
+	return this;
 }
 
 void Widget::onMousePress(glm::ivec2 position) {}

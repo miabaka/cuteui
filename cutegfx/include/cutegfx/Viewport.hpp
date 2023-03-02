@@ -4,16 +4,16 @@
 
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
+#include <ctl/memory.hpp>
 
+#include "DeviceObject.hpp"
 #include "Window.hpp"
 
 namespace cutegfx {
 
-class Viewport {
+class Viewport : public DeviceObject {
 public:
-	virtual ~Viewport() = default;
-
-	virtual void setOutputWindow(std::shared_ptr<Window> window) = 0;
+	virtual void setOutputWindow(const ctl::RcPtr<Window> &window) = 0;
 
 	virtual void clear(glm::vec4 color) = 0;
 

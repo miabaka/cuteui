@@ -20,7 +20,7 @@ public:
 
 	virtual ~Platform() = default;
 
-	virtual std::shared_ptr<Window> createWindow() = 0;
+	virtual ctl::RcPtr<Window> createWindow() = 0;
 
 	virtual Renderer &getRenderer() = 0;
 

@@ -2,6 +2,7 @@
 
 #include <glm/vec2.hpp>
 #include <cutegfx/Renderer.hpp>
+#include <ctl/memory.hpp>
 
 enum class Alignment {
 	Fill,
@@ -10,10 +11,8 @@ enum class Alignment {
 	End
 };
 
-class Widget {
+class Widget : public ctl::RcObject {
 public:
-	virtual ~Widget() = default;
-
 	virtual bool isVisible() const;
 
 	virtual void setVisible(bool visible);
@@ -38,8 +37,7 @@ public:
 
 	virtual bool containsPoint(glm::ivec2 point) const;
 
-	virtual std::shared_ptr<Widget>
-	getWidgetAtPoint(glm::ivec2 point, const std::shared_ptr<Widget> &defaultWidget) const;
+	virtual ctl::RcPtr<Widget> getWidgetAtPoint(glm::ivec2 point);
 
 	virtual void onMousePress(glm::ivec2 position);
 

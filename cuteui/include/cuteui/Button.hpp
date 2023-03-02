@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cuteutil/Signal.hpp>
+#include <ctl/Signal.hpp>
 #include "Widget.hpp"
 
 class Button : public Widget {
@@ -13,7 +13,7 @@ public:
 
 	void onMouseRelease(glm::ivec2 position) override;
 
-	cuteutil::Signal<> sClick;
+	ctl::Signal<> sClick;
 
 private:
 	bool _pressed = false;

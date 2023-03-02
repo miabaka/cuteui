@@ -5,8 +5,8 @@
 
 using namespace cutegfx;
 
-Direct3D11Shader::Direct3D11Shader(std::shared_ptr<Direct3D11Device> device, Type type, std::vector<char> &&bytecode)
-		: _device(std::move(device)),
+Direct3D11Shader::Direct3D11Shader(const ctl::RcPtr<Direct3D11Device> &device, Type type, std::vector<char> &&bytecode)
+		: _device(device),
 		  _bytecode(bytecode),
 		  _type(type) {
 	_d3dDevice = _device->getDevice();

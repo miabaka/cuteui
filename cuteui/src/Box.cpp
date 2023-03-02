@@ -50,13 +50,12 @@ void Box::draw(cutegfx::Renderer &renderer) {
 		child->draw(renderer);
 }
 
-std::shared_ptr<Widget>
-Box::getWidgetAtPoint(glm::ivec2 point, const std::shared_ptr<Widget> &defaultWidget) const {
+ctl::RcPtr<Widget> Box::getWidgetAtPoint(glm::ivec2 point) {
 	if (!containsPoint(point))
 		return nullptr;
 
 	for (auto &child: _children) {
-		std::shared_ptr widgetAtPoint = child->getWidgetAtPoint(point, child);
+		ctl::RcPtr widgetAtPoint = child->getWidgetAtPoint(point);
 
 		if (!widgetAtPoint)
 			continue;
@@ -64,9 +63,9 @@ Box::getWidgetAtPoint(glm::ivec2 point, const std::shared_ptr<Widget> &defaultWi
 		return widgetAtPoint;
 	}
 
-	return defaultWidget;
+	return this;
 }
 
-void Box::add(const std::shared_ptr<Widget> &widget) {
+void Box::add(const ctl::RcPtr<Widget> &widget) {
 	_children.emplace_back(widget);
 }

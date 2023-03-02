@@ -7,8 +7,9 @@
 #include <thread>
 #include <unordered_set>
 
+#include <ctl/memory.hpp>
+#include <ctl/Signal.hpp>
 #include <cutegfx/Platform.hpp>
-#include <cuteutil/Signal.hpp>
 
 #include "../Window.hpp"
 
@@ -16,13 +17,13 @@ class WindowManager {
 public:
 	using UpdateType = cutegfx::Platform::TickType;
 
-	void registerVisibleWindow(std::shared_ptr<Window> window);
+	void registerVisibleWindow(const ctl::RcPtr<Window> &window);
 
-	void unregisterVisibleWindow(std::shared_ptr<Window> window);
+	void unregisterVisibleWindow(const ctl::RcPtr<Window> &window);
 
-	std::shared_ptr<Window> getLastActiveWindow();
+	ctl::RcPtr<Window> getLastActiveWindow();
 
-	void setLastActiveWindow(std::shared_ptr<Window> window);
+	void setLastActiveWindow(const ctl::RcPtr<Window> &window);
 
 	void updateWindows();
 
@@ -32,11 +33,11 @@ public:
 
 	void setWaitSync(bool waitSync = true);
 
-	cuteutil::Signal<UpdateType> sUpdate;
+	ctl::Signal<UpdateType> sUpdate;
 
 private:
-	std::unordered_set<std::shared_ptr<Window>> _visibleWindows;
-	std::shared_ptr<Window> _lastActiveWindow;
+	std::unordered_set<ctl::RcPtr<Window>> _visibleWindows;
+	ctl::RcPtr<Window> _lastActiveWindow;
 	std::thread _renderThread;
 	std::mutex _visibleWindowsMutex;
 	std::mutex _lastActiveWindowMutex;

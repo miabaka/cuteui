@@ -21,7 +21,7 @@ public:
 
 	~Win32Platform() override;
 
-	std::shared_ptr<Window> createWindow() override;
+	ctl::RcPtr<Window> createWindow() override;
 
 	Renderer &getRenderer() override;
 
@@ -32,7 +32,7 @@ public:
 private:
 	WNDCLASSEXW _windowClass;
 	WNDCLASSEXW _helperWindowClass;
-	std::shared_ptr<Renderer> _renderer;
+	ctl::RcPtr<Renderer> _renderer;
 	Win32HelperWindow _helperWindow;
 
 	static WNDCLASSEXW registerWindowClass();

@@ -1,8 +1,10 @@
 #pragma once
 
+#include "DeviceObject.hpp"
+
 namespace cutegfx {
 
-class Shader {
+class Shader : public DeviceObject {
 public:
 	enum class Format {
 		Glsl,
@@ -13,8 +15,6 @@ public:
 		Pixel,
 		Vertex
 	};
-
-	virtual ~Shader() = default;
 
 	virtual Format getFormat() const = 0;
 

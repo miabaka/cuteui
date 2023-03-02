@@ -1,5 +1,6 @@
 #include "cuteui/Application.hpp"
 
+#include <ctl/memory.hpp>
 #include "cuteui/Window.hpp"
 
 Window::Window(glm::ivec2 size, const std::string &title) {
@@ -80,16 +81,15 @@ void Window::draw(cutegfx::Renderer &renderer) {
 	_mainWidget->draw(renderer);
 }
 
-std::shared_ptr<Widget>
-Window::getWidgetAtPoint(glm::ivec2 point, const std::shared_ptr<Widget> &defaultWidget) const {
+ctl::RcPtr<Widget> Window::getWidgetAtPoint(glm::ivec2 point) {
 	if (!_mainWidget)
 		return nullptr;
 
-	return _mainWidget->getWidgetAtPoint(point, _mainWidget);
+	return _mainWidget->getWidgetAtPoint(point);
 }
 
 void Window::onMousePress(glm::ivec2 position) {
-	std::shared_ptr<Widget> widgetUnderCursor = getWidgetAtPoint(position, nullptr);
+	ctl::RcPtr<Widget> widgetUnderCursor = getWidgetAtPoint(position);
 
 	if (!widgetUnderCursor)
 		return;
@@ -100,14 +100,14 @@ void Window::onMousePress(glm::ivec2 position) {
 }
 
 void Window::onMouseRelease(glm::ivec2 position) {
-	std::shared_ptr<Widget> pressedWidget = nullptr;
+	ctl::RcPtr<Widget> pressedWidget;
 
 	if (_pressedWidget) {
 		_pressedWidget->onMouseRelease(position);
 		std::swap(pressedWidget, _pressedWidget);
 	}
 
-	std::shared_ptr<Widget> widgetUnderCursor = getWidgetAtPoint(position, nullptr);
+	ctl::RcPtr<Widget> widgetUnderCursor = getWidgetAtPoint(position);
 
 	if (!(widgetUnderCursor && widgetUnderCursor != pressedWidget))
 		return;
@@ -123,21 +123,21 @@ bool Window::setBackdropType(BackdropType backdropType) {
 	return _platformWindow->setBackdropType(backdropType);
 }
 
-void Window::setMainWidget(std::shared_ptr<Widget> widget) {
-	_mainWidget = std::move(widget);
+void Window::setMainWidget(const ctl::RcPtr<Widget> &widget) {
+	_mainWidget = widget;
 }
 
 void Window::onVisibilityChange(bool visible) {
 	auto &wm = Application::getInstance().getWindowManager();
 
 	if (visible)
-		wm.registerVisibleWindow(asShared());
+		wm.registerVisibleWindow(this);
 	else
-		wm.unregisterVisibleWindow(asShared());
+		wm.unregisterVisibleWindow(this);
 }
 
 void Window::onFocus() {
-	Application::getInstance().getWindowManager().setLastActiveWindow(asShared());
+	Application::getInstance().getWindowManager().setLastActiveWindow(this);
 }
 
 void Window::present(bool waitSync) {

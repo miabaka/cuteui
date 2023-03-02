@@ -4,7 +4,7 @@
 #include <list>
 #include <utility>
 
-namespace cuteutil {
+namespace ctl {
 
 template<typename ...TArgs>
 class Signal {
@@ -48,4 +48,4 @@ private:
 	std::function<void(const TArgs &...)> _handler;
 };
 
-} // namespace cuteutil
+} // namespace ctl

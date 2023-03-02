@@ -4,15 +4,15 @@
 #include <string>
 
 #include <glm/vec2.hpp>
+#include <ctl/memory.hpp>
 #include <cutegfx/Viewport.hpp>
 #include <cutegfx/Window.hpp>
-#include <cuteutil/SharedObject.hpp>
 
 #include "Widget.hpp"
 
 class WindowManager;
 
-class Window : public cuteutil::SharedObject<Window>, public Widget {
+class Window : public Widget {
 	friend class WindowManager;
 
 public:
@@ -35,8 +35,7 @@ public:
 
 	void draw(cutegfx::Renderer &renderer) override;
 
-	std::shared_ptr<Widget>
-	getWidgetAtPoint(glm::ivec2 point, const std::shared_ptr<Widget> &defaultWidget) const override;
+	ctl::RcPtr<Widget> getWidgetAtPoint(glm::ivec2 point) override;
 
 	void onMousePress(glm::ivec2 position) override;
 
@@ -46,14 +45,14 @@ public:
 
 	bool setBackdropType(BackdropType backdropType);
 
-	void setMainWidget(std::shared_ptr<Widget> widget);
+	void setMainWidget(const ctl::RcPtr<Widget> &widget);
 
 private:
-	std::shared_ptr<cutegfx::Window> _platformWindow;
-	std::shared_ptr<cutegfx::Viewport> _viewport;
-	std::shared_ptr<Widget> _mainWidget;
+	ctl::RcPtr<cutegfx::Window> _platformWindow;
+	ctl::RcPtr<cutegfx::Viewport> _viewport;
+	ctl::RcPtr<Widget> _mainWidget;
 	glm::vec2 _viewportSize{};
-	std::shared_ptr<Widget> _pressedWidget;
+	ctl::RcPtr<Widget> _pressedWidget;
 
 	void onVisibilityChange(bool visible);
 

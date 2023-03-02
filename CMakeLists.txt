@@ -4,7 +4,7 @@ project(CuteUI)
 
 add_subdirectory(third_party/glm)
 
-add_subdirectory(cuteutil)
+add_subdirectory(ctl)
 add_subdirectory(cutegfx)
 add_subdirectory(cuteui)
 

@@ -3,11 +3,12 @@
 #include <memory>
 #include <vector>
 
+#include "DeviceObject.hpp"
 #include "Shader.hpp"
 
 namespace cutegfx {
 
-class Buffer {
+class Buffer : public DeviceObject {
 public:
 	enum class Type {
 		Constant,
@@ -25,9 +26,7 @@ public:
 		ElementType type;
 	};
 
-	virtual ~Buffer() = default;
-
-	virtual void setLayout(const std::vector<ElementDesc> &elements, std::shared_ptr<Shader> vertexShader) = 0;
+	virtual void setLayout(const std::vector<ElementDesc> &elements, ctl::RcPtr<Shader> vertexShader) = 0;
 
 	virtual void setData(const void *data, size_t size) = 0;
 

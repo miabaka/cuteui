@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <ctl/memory.hpp>
 
 #include "Win32Window.hpp"
 
@@ -10,14 +11,14 @@ using namespace cutegfx;
 Win32Platform::Win32Platform()
 		: _windowClass(registerWindowClass()),
 		  _helperWindowClass(registerHelperWindowClass()),
-		  _renderer(std::make_shared<Renderer>(Direct3D11Device::create())) {}
+		  _renderer(ctl::RcPtr<Renderer>::create(ctl::RcPtr<Direct3D11Device>::create())) {};
 
 Win32Platform::~Win32Platform() {
 	unregisterWindowClasses();
 }
 
-std::shared_ptr<Window> Win32Platform::createWindow() {
-	return std::make_shared<Win32Window>();
+ctl::RcPtr<Window> Win32Platform::createWindow() {
+	return ctl::RcPtr<Win32Window>::create();
 }
 
 Renderer &Win32Platform::getRenderer() {

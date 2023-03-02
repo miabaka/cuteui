@@ -9,14 +9,14 @@
 #include <d3d11.h>
 #include <dcomp.h>
 #include <wrl.h>
-#include <cuteutil/SharedObject.hpp>
+#include <ctl/memory.hpp>
 
 #include "cutegfx/Device.hpp"
 #include "Direct3D11Viewport.hpp"
 
 namespace cutegfx {
 
-class Direct3D11Device : public cuteutil::SharedObject<Direct3D11Device>, public Device {
+class Direct3D11Device : public Device {
 public:
 	Direct3D11Device();
 
@@ -28,11 +28,11 @@ public:
 
 	Shader::Format getShaderFormat() const override;
 
-	std::shared_ptr<Buffer> createBuffer(Buffer::Type type) override;
+	ctl::RcPtr<Buffer> createBuffer(Buffer::Type type) override;
 
-	std::shared_ptr<Shader> createShader(Shader::Type type, const void *bytecode, size_t size) override;
+	ctl::RcPtr<Shader> createShader(Shader::Type type, const void *bytecode, size_t size) override;
 
-	std::shared_ptr<Viewport> createViewport() override;
+	ctl::RcPtr<Viewport> createViewport() override;
 
 	void draw(index_t firstIndex, index_t indexCount) override;
 
@@ -44,9 +44,9 @@ public:
 
 	Microsoft::WRL::ComPtr<IDXGIAdapter> getDxgiAdapter();
 
-	void setActiveViewport(std::weak_ptr<Direct3D11Viewport> viewport);
+	void setActiveViewport(const ctl::RcPtr<Direct3D11Viewport> &viewport);
 
-	bool isViewportActive(const std::shared_ptr<Direct3D11Viewport>& viewport) const;
+	bool isViewportActive(const ctl::RcPtr<Direct3D11Viewport> &viewport) const;
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> _device;
@@ -54,7 +54,7 @@ private:
 	Microsoft::WRL::ComPtr<IDXGIDevice> _dxgiDevice;
 	Microsoft::WRL::ComPtr<IDXGIAdapter> _dxgiAdapter;
 	Microsoft::WRL::ComPtr<IDCompositionDevice> _compositionDevice;
-	std::weak_ptr<Direct3D11Viewport> _activeViewport;
+	ctl::WeakRcPtr<Direct3D11Viewport> _activeViewport;
 
 	void createDevice();
 

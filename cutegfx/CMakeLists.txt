@@ -20,7 +20,7 @@ target_include_directories(cutegfx PUBLIC include)
 
 target_link_libraries(cutegfx PUBLIC
         glm
-        cuteutil)
+        ctl)
 
 if (WIN32)
     target_sources(cutegfx PRIVATE

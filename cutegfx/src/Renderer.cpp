@@ -58,7 +58,7 @@ static unsigned char PIXEL_SHADER_CODE[] = {
 		0x00, 0x00, 0x00, 0x00, 0x46, 0x1e, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3e, 0x00, 0x00, 0x01
 };
 
-Renderer::Renderer(const std::shared_ptr<Device> &device)
+Renderer::Renderer(const ctl::RcPtr<Device> &device)
 		: _device(device),
 		  _vertexBuffer(device->createBuffer(Buffer::Type::Vertex)),
 		  _indexBuffer(device->createBuffer(Buffer::Type::Index)),
@@ -72,13 +72,13 @@ Renderer::Renderer(const std::shared_ptr<Device> &device)
 	);
 }
 
-std::shared_ptr<Viewport> Renderer::createViewport() {
+ctl::RcPtr<Viewport> Renderer::createViewport() {
 	return _device->createViewport();
 }
 
-void Renderer::setViewport(std::shared_ptr<Viewport> viewport) {
+void Renderer::setViewport(const ctl::RcPtr<Viewport> &viewport) {
 	submitCurrentMesh();
-	_commandList.emplace_back(SetViewportCommand{std::move(viewport)});
+	_commandList.emplace_back(SetViewportCommand{viewport});
 }
 
 void Renderer::resize(glm::uvec2 size) {
@@ -109,7 +109,7 @@ void Renderer::render() {
 	_vertexBuffer->use();
 	_indexBuffer->use();
 
-	std::shared_ptr<Viewport> viewport;
+	ctl::RcPtr<Viewport> viewport;
 
 	for (auto &command: _commandList) {
 		std::visit(overloaded{

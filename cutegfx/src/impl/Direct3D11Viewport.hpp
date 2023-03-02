@@ -9,8 +9,8 @@
 #include <d3d11.h>
 #include <wrl.h>
 #include <glm/vec2.hpp>
+#include <ctl/memory.hpp>
 
-#include "cuteutil/SharedObject.hpp"
 #include "cutegfx/Viewport.hpp"
 #include "Win32Window.hpp"
 
@@ -18,11 +18,11 @@ namespace cutegfx {
 
 class Direct3D11Device;
 
-class Direct3D11Viewport : public cuteutil::SharedObject<Direct3D11Viewport>, public Viewport {
+class Direct3D11Viewport : public Viewport {
 public:
-	explicit Direct3D11Viewport(std::shared_ptr<Direct3D11Device> device);
+	explicit Direct3D11Viewport(const ctl::RcPtr<Direct3D11Device> &device);
 
-	void setOutputWindow(std::shared_ptr<Window> window) override;
+	void setOutputWindow(const ctl::RcPtr<Window> &window) override;
 
 	void createSwapChain(glm::ivec2 size);
 
@@ -43,8 +43,8 @@ private:
 	Microsoft::WRL::ComPtr<IDCompositionTarget> _compositionTarget;
 	Microsoft::WRL::ComPtr<IDCompositionVisual> _compositionVisual;
 	Microsoft::WRL::ComPtr<IDXGISwapChain1> _swapChain;
-	std::shared_ptr<Direct3D11Device> _device;
-	std::shared_ptr<Win32Window> _outputWindow;
+	ctl::RcPtr<Direct3D11Device> _device;
+	ctl::RcPtr<Win32Window> _outputWindow;
 	glm::uvec2 _lastSwapChainSize{};
 
 	void resizeSwapChainIfNecessary(glm::uvec2 newSize);
