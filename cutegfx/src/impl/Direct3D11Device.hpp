@@ -20,12 +20,6 @@ class Direct3D11Device : public Device {
 public:
 	Direct3D11Device();
 
-	Direct3D11Device(Direct3D11Device &) = delete;
-
-	Direct3D11Device(Direct3D11Device &&) = delete;
-
-	~Direct3D11Device() override = default;
-
 	Shader::Format getShaderFormat() const override;
 
 	ctl::RcPtr<Buffer> createBuffer(Buffer::Type type) override;

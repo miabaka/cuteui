@@ -4,8 +4,6 @@
 #include <type_traits>
 #include <utility>
 
-#include <iostream>
-
 namespace ctl {
 
 class RcObject;
@@ -32,11 +30,12 @@ public:
 	};
 
 	template<typename TOther>
-	RcPtr(const RcPtr<TOther> &other) : RcPtr(static_cast<T *>(other._object)) {}
+	RcPtr(const RcPtr<TOther> other) : RcPtr(static_cast<T *>(other._object)) {}
 
-	template<typename TOther>
-	RcPtr(RcPtr<TOther> &&other) noexcept {
-		_object = static_cast<T *>(other._object);
+	RcPtr(const RcPtr &other) : RcPtr(other._object) {}
+
+	RcPtr(RcPtr<T> &&other) noexcept {
+		_object = other._object;
 		other._object = nullptr;
 	}
 

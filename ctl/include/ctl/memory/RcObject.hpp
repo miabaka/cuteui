@@ -1,7 +1,6 @@
 #pragma once
 
 #include <atomic>
-#include <iostream>
 
 namespace ctl {
 
@@ -19,18 +18,13 @@ public:
 
 	RcObject(RcObject &&) = delete;
 
-	virtual ~RcObject() {
-		std::cout << this << " destroy" << std::endl;
-	}
+	virtual ~RcObject() = default;
 
 	inline void addRef() {
-		std::cout << this << " addRef" << std::endl;
 		_refCount++;
 	}
 
 	inline void release() {
-		std::cout << this << " release" << std::endl;
-
 		if (_refCount.fetch_sub(1, std::memory_order_acq_rel) > 1)
 			return;
 
