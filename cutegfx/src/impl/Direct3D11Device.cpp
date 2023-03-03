@@ -19,7 +19,7 @@ Shader::Format Direct3D11Device::getShaderFormat() const {
 }
 
 ctl::RcPtr<Buffer> Direct3D11Device::createBuffer(Buffer::Type type) {
-	return ctl::RcPtr<Direct3D11Buffer>::create(this, type);
+	return ctl::RcPtr<Direct3D11Buffer>::alloc(this, type);
 }
 
 ctl::RcPtr<Shader> Direct3D11Device::createShader(Shader::Type type, const void *bytecode, size_t size) {
@@ -28,11 +28,11 @@ ctl::RcPtr<Shader> Direct3D11Device::createShader(Shader::Type type, const void 
 
 	std::vector<char> bytecodeVec(bytecodeBegin, bytecodeEnd);
 
-	return ctl::RcPtr<Direct3D11Shader>::create(this, type, std::move(bytecodeVec));
+	return ctl::RcPtr<Direct3D11Shader>::alloc(this, type, std::move(bytecodeVec));
 }
 
 ctl::RcPtr<Viewport> Direct3D11Device::createViewport() {
-	return ctl::RcPtr<Direct3D11Viewport>::create(this);
+	return ctl::RcPtr<Direct3D11Viewport>::alloc(this);
 }
 
 void Direct3D11Device::draw(index_t firstIndex, index_t indexCount) {

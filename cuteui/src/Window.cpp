@@ -127,6 +127,10 @@ void Window::setMainWidget(const ctl::RcPtr<Widget> &widget) {
 	_mainWidget = widget;
 }
 
+void Window::setTitle(const std::string &title) {
+	_platformWindow->setTitle(title);
+}
+
 void Window::onVisibilityChange(bool visible) {
 	auto &wm = Application::getInstance().getWindowManager();
 

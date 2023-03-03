@@ -11,14 +11,14 @@ using namespace cutegfx;
 Win32Platform::Win32Platform()
 		: _windowClass(registerWindowClass()),
 		  _helperWindowClass(registerHelperWindowClass()),
-		  _renderer(ctl::RcPtr<Renderer>::create(ctl::RcPtr<Direct3D11Device>::create())) {};
+		  _renderer(ctl::RcPtr<Renderer>::alloc(ctl::RcPtr<Direct3D11Device>::alloc())) {};
 
 Win32Platform::~Win32Platform() {
 	unregisterWindowClasses();
 }
 
 ctl::RcPtr<Window> Win32Platform::createWindow() {
-	return ctl::RcPtr<Win32Window>::create();
+	return ctl::RcPtr<Win32Window>::alloc();
 }
 
 Renderer &Win32Platform::getRenderer() {

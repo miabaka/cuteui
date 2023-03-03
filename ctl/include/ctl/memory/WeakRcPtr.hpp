@@ -21,7 +21,7 @@ public:
 
 	WeakRcPtr(const RcPtr<T> &other) : WeakRcPtr(other.get()) {};
 
-	WeakRcPtr(WeakRcPtr &other)
+	WeakRcPtr(const WeakRcPtr &other)
 			: _object{other._object},
 			  _weakInfo(other._weakInfo) {
 		if (_weakInfo)
@@ -56,11 +56,18 @@ public:
 		return *this;
 	}
 
+	operator bool() const {
+		if (!_weakInfo)
+			return false;
+
+		return _weakInfo->_objectAlive;
+	}
+
 	RcPtr<T> lock() const {
 		if (!_weakInfo->_objectAlive)
-			return RcPtr<T>();
+			return nullptr;
 
-		return RcPtr<T>(_object);
+		return _object;
 	}
 
 private:

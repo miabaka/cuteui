@@ -12,7 +12,7 @@ enum class Direction {
 
 class Box : public Widget {
 public:
-	explicit Box(Direction direction = Direction::Horizontal);
+	explicit Box(Direction direction = Direction::Horizontal, int spacing = 0);
 
 	glm::ivec2 computeRequiredSize() override;
 
@@ -26,9 +26,14 @@ public:
 
 	void setDirection(Direction direction);
 
+	int getSpacing() const;
+
+	void setSpacing(int spacing);
+
 	void add(const ctl::RcPtr<Widget> &widget);
 
 private:
 	std::vector<ctl::RcPtr<Widget>> _children;
 	Direction _direction;
+	int _spacing;
 };

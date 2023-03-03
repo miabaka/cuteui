@@ -66,7 +66,7 @@ public:
 	}
 
 	template<typename ...TArgs>
-	static RcPtr create(TArgs &&...args) {
+	static RcPtr alloc(TArgs &&...args) {
 		return RcPtr<T>(new T(std::forward<TArgs>(args)...));
 	}
 

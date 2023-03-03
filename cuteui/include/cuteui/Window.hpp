@@ -47,6 +47,8 @@ public:
 
 	void setMainWidget(const ctl::RcPtr<Widget> &widget);
 
+	void setTitle(const std::string &title);
+
 private:
 	ctl::RcPtr<cutegfx::Window> _platformWindow;
 	ctl::RcPtr<cutegfx::Viewport> _viewport;

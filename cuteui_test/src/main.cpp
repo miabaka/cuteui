@@ -1,4 +1,3 @@
-#include <ctl/memory.hpp>
 #include <cuteui/Application.hpp>
 #include <cuteui/Box.hpp>
 #include <cuteui/Button.hpp>
@@ -6,24 +5,20 @@
 
 class MyCuteApp : public Application {
 public:
-	MyCuteApp() : _toggleableWindow(ctl::RcPtr<Window>::create(glm::ivec2{256, 256}, "Я ьака")) {
-		auto button = ctl::RcPtr<Button>::create();
+	MyCuteApp() {
+		auto box = ctl::RcPtr<Box>::alloc(Direction::Vertical, 6);
 
-		button->setHorizontalAlignment(Alignment::Center);
-		button->setVerticalAlignment(Alignment::Center);
+		box->setHorizontalAlignment(Alignment::Center);
+		box->setVerticalAlignment(Alignment::Center);
 
-		button->sClick.bind([&]() {
-			_toggleableWindow->setVisible(!_toggleableWindow->isVisible());
-		});
+		for (int i = 0; i < 10; i++)
+			box->add(ctl::RcPtr<Button>::alloc());
 
-		auto window = ctl::RcPtr<Window>::create(glm::ivec2{640, 400}, "Мия пишет гуи");
+		auto window = ctl::RcPtr<Window>::alloc(glm::ivec2{640, 400}, "Мия пишет гуи");
 
-		window->setMainWidget(button);
+		window->setMainWidget(box);
 		window->setVisible(true);
 	}
-
-private:
-	ctl::RcPtr<Window> _toggleableWindow;
 };
 
 int main() {

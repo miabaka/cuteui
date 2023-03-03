@@ -74,10 +74,7 @@ bool Widget::containsPoint(glm::ivec2 point) const {
 }
 
 ctl::RcPtr<Widget> Widget::getWidgetAtPoint(glm::ivec2 point) {
-	if (!containsPoint(point))
-		return nullptr;
-
-	return this;
+	return containsPoint(point) ? this : nullptr;
 }
 
 void Widget::onMousePress(glm::ivec2 position) {}
