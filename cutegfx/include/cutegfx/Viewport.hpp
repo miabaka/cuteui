@@ -18,7 +18,7 @@ public:
 
 	virtual void setSize(glm::uvec2 size) = 0;
 
-	virtual void clear(glm::vec4 color) = 0;
+	virtual void clear(glm::u8vec4 color) = 0;
 
 	virtual void present(bool waitSync) = 0;
 

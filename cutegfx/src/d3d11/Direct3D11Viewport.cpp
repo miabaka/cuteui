@@ -73,11 +73,14 @@ void Direct3D11Viewport::setSize(glm::uvec2 size) {
 	resizeSwapChainIfNecessary(size);
 }
 
-void Direct3D11Viewport::clear(glm::vec4 color) {
-	color.r *= color.a;
-	color.g *= color.a;
-	color.b *= color.a;
-	_d3dDeviceContext->ClearRenderTargetView(_d3dRenderTarget.Get(), glm::value_ptr(color));
+void Direct3D11Viewport::clear(glm::u8vec4 color) {
+	glm::vec4 floatColor = glm::vec4(color) / 255.f;
+	
+	floatColor.r *= floatColor.a;
+	floatColor.g *= floatColor.a;
+	floatColor.b *= floatColor.a;
+
+	_d3dDeviceContext->ClearRenderTargetView(_d3dRenderTarget.Get(), glm::value_ptr(floatColor));
 }
 
 // TODO: properly handle minimized windows

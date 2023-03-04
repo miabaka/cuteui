@@ -8,9 +8,9 @@ void Button::draw(cutegfx::Renderer &renderer) {
 	glm::vec4 color;
 
 	if (_pressed)
-		color = {0.95f, 0.95f, 0.95f, 1.f};
+		color = {0xf2, 0xf2, 0xf2, 0xff};
 	else
-		color = {0.9f, 0.9f, 0.9f, 1.f};
+		color = {0xe6, 0xe6, 0xe6, 0xff};
 
 	renderer.fillRect(getPosition(), getPosition() + getActualSize(), color);
 }

@@ -73,7 +73,7 @@ void Window::draw(cutegfx::Renderer &renderer) {
 	renderer.setViewport(_viewport);
 
 	renderer.resize(_viewportSize);
-	renderer.clear({1.f, 1.f, 1.f, 1.f});
+	renderer.clear({0xff, 0xff, 0xff, 0xff});
 
 	if (!_mainWidget)
 		return;

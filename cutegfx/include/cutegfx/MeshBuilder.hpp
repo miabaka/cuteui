@@ -17,7 +17,7 @@ public:
 
 	MeshBuilder();
 
-	index_t addRect(glm::vec2 p1, glm::vec2 p2, glm::vec4 color);
+	index_t addRect(glm::vec2 p1, glm::vec2 p2, glm::u8vec4 color);
 
 	void reset();
 

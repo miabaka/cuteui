@@ -30,7 +30,7 @@ public:
 
 	void setSize(glm::uvec2 size) override;
 
-	void clear(glm::vec4 color) override;
+	void clear(glm::u8vec4 color) override;
 
 	void present(bool waitSync) override;
 

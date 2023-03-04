@@ -30,7 +30,7 @@ void Renderer::clear(glm::vec4 color) {
 	_commandList.emplace_back(ClearCommand{color});
 }
 
-void Renderer::fillRect(glm::vec2 p1, glm::vec2 p2, glm::vec4 color) {
+void Renderer::fillRect(glm::vec2 p1, glm::vec2 p2, glm::u8vec4 color) {
 	MeshBuilder::index_t firstIndex = _meshBuilder.addRect(p1, p2, color);
 
 	if (!_hasIncompleteMesh)
@@ -53,8 +53,14 @@ void Renderer::render() {
 					viewport = cmd.viewport;
 					viewport->use();
 				},
-				[&](ClearCommand &cmd) { viewport->clear(cmd.color); },
-				[&](ResizeCommand &cmd) { viewport->setSize(cmd.size); },
+				[&](ClearCommand &cmd) {
+					if (viewport)
+						viewport->clear(cmd.color);
+				},
+				[&](ResizeCommand &cmd) {
+					if (viewport)
+						viewport->setSize(cmd.size);
+				},
 				[&](DrawMeshCommand &cmd) { _device->draw(cmd.firstIndex, cmd.indexCount); }
 		}, command);
 	}

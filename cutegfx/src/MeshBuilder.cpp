@@ -9,7 +9,7 @@ MeshBuilder::MeshBuilder() {
 	_availableIndices = _indices.capacity();
 }
 
-MeshBuilder::index_t MeshBuilder::addRect(glm::vec2 p1, glm::vec2 p2, glm::vec4 color) {
+MeshBuilder::index_t MeshBuilder::addRect(glm::vec2 p1, glm::vec2 p2, glm::u8vec4 color) {
 	index_t leftTop = emitVertex({p1, color});
 	index_t rightTop = emitVertex({{p2.x, p1.y}, color});
 	index_t leftBottom = emitVertex({{p1.x, p2.y}, color});

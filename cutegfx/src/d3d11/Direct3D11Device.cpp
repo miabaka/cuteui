@@ -151,7 +151,7 @@ void Direct3D11Device::setupVertexInputLayout() {
 
 	std::array elementDescs = {
 			ElementDesc{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, APPEND, PER_VERTEX, 0},
-			ElementDesc{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, APPEND, PER_VERTEX, 0}
+			ElementDesc{"COLOR", 0, DXGI_FORMAT_R8G8B8A8_UINT, 0, APPEND, PER_VERTEX, 0}
 	};
 
 	HRESULT result = _device->CreateInputLayout(
