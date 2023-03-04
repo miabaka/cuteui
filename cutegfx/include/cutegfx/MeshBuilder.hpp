@@ -5,20 +5,15 @@
 
 #include <glm/glm.hpp>
 
+#include "MeshBuilder.hpp"
 #include "Device.hpp"
 
 namespace cutegfx {
 
 class MeshBuilder {
 public:
-	using index_t = Device::index_t;
-
-#pragma pack(push, 1)
-	struct Vertex {
-		glm::vec2 position;
-		glm::vec4 color;
-	};
-#pragma pack(pop)
+	using index_t = InputMesh::index_t;
+	using Vertex = InputMesh::Vertex;
 
 	MeshBuilder();
 
@@ -26,9 +21,9 @@ public:
 
 	void reset();
 
-	void uploadAndReset(Buffer &vertexBuffer, Buffer &indexBuffer);
-
 	index_t currentIndex() const;
+
+	InputMesh getMesh() const;
 
 private:
 	std::vector<Vertex> _vertices;

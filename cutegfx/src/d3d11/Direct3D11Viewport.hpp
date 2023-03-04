@@ -8,11 +8,11 @@
 #include <dxgi1_2.h>
 #include <d3d11.h>
 #include <wrl.h>
-#include <glm/vec2.hpp>
+#include "glm/vec2.hpp"
 #include <ctl/memory.hpp>
 
 #include "cutegfx/Viewport.hpp"
-#include "Win32Window.hpp"
+#include "../win32/Win32Window.hpp"
 
 namespace cutegfx {
 
@@ -26,9 +26,11 @@ public:
 
 	void createSwapChain(glm::ivec2 size);
 
-	void clear(glm::vec4 color) override;
+	glm::uvec2 getSize() const override;
 
-	void resize(glm::uvec2 size) override;
+	void setSize(glm::uvec2 size) override;
+
+	void clear(glm::vec4 color) override;
 
 	void present(bool waitSync) override;
 

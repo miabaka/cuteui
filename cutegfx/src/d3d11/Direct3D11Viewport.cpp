@@ -3,7 +3,7 @@
 #include <cassert>
 #include <stdexcept>
 
-#include <glm/gtc/type_ptr.hpp>
+#include "glm/gtc/type_ptr.hpp"
 
 #include "Direct3D11Device.hpp"
 
@@ -65,15 +65,19 @@ void Direct3D11Viewport::createSwapChain(glm::ivec2 size) {
 	_lastSwapChainSize = size;
 }
 
+glm::uvec2 Direct3D11Viewport::getSize() const {
+	return _lastSwapChainSize;
+}
+
+void Direct3D11Viewport::setSize(glm::uvec2 size) {
+	resizeSwapChainIfNecessary(size);
+}
+
 void Direct3D11Viewport::clear(glm::vec4 color) {
 	color.r *= color.a;
 	color.g *= color.a;
 	color.b *= color.a;
 	_d3dDeviceContext->ClearRenderTargetView(_d3dRenderTarget.Get(), glm::value_ptr(color));
-}
-
-void Direct3D11Viewport::resize(glm::uvec2 size) {
-	resizeSwapChainIfNecessary(size);
 }
 
 // TODO: properly handle minimized windows

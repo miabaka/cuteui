@@ -49,11 +49,6 @@ private:
 	using RenderCommand = std::variant<SetViewportCommand, ResizeCommand, ClearCommand, DrawMeshCommand>;
 
 	ctl::RcPtr<Device> _device;
-	ctl::RcPtr<Buffer> _vertexBuffer;
-	ctl::RcPtr<Buffer> _indexBuffer;
-	ctl::RcPtr<Buffer> _constantBuffer;
-	ctl::RcPtr<Shader> _vertexShader;
-	ctl::RcPtr<Shader> _pixelShader;
 	std::deque<RenderCommand> _commandList;
 	MeshBuilder _meshBuilder;
 	bool _hasIncompleteMesh = false;

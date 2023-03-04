@@ -6,7 +6,7 @@
 #include <windows.h>
 
 #include "cutegfx/Platform.hpp"
-#include "Direct3D11Device.hpp"
+#include "../d3d11/Direct3D11Device.hpp"
 
 #include "Win32HelperWindow.hpp"
 

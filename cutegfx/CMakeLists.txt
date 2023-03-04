@@ -4,12 +4,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_library(cutegfx STATIC
-        include/cutegfx/Buffer.hpp
         include/cutegfx/Device.hpp
         include/cutegfx/MeshBuilder.hpp
         include/cutegfx/Platform.hpp
         include/cutegfx/Renderer.hpp
-        include/cutegfx/Shader.hpp
         include/cutegfx/Viewport.hpp
         include/cutegfx/Window.hpp
         src/MeshBuilder.cpp
@@ -24,20 +22,16 @@ target_link_libraries(cutegfx PUBLIC
 
 if (WIN32)
     target_sources(cutegfx PRIVATE
-            src/impl/Direct3D11Buffer.cpp
-            src/impl/Direct3D11Buffer.hpp
-            src/impl/Direct3D11Device.cpp
-            src/impl/Direct3D11Device.hpp
-            src/impl/Direct3D11Shader.cpp
-            src/impl/Direct3D11Shader.hpp
-            src/impl/Direct3D11Viewport.cpp
-            src/impl/Direct3D11Viewport.hpp
-            src/impl/Win32HelperWindow.cpp
-            src/impl/Win32HelperWindow.hpp
-            src/impl/Win32Platform.cpp
-            src/impl/Win32Platform.hpp
-            src/impl/Win32Window.cpp
-            src/impl/Win32Window.hpp)
+            src/d3d11/Direct3D11Device.cpp
+            src/d3d11/Direct3D11Device.hpp
+            src/d3d11/Direct3D11Viewport.cpp
+            src/d3d11/Direct3D11Viewport.hpp
+            src/win32/Win32HelperWindow.cpp
+            src/win32/Win32HelperWindow.hpp
+            src/win32/Win32Platform.cpp
+            src/win32/Win32Platform.hpp
+            src/win32/Win32Window.cpp
+            src/win32/Win32Window.hpp)
 
     target_link_libraries(cutegfx PRIVATE
             dwmapi

@@ -9,7 +9,7 @@
 #include <d3d11.h>
 #include <dcomp.h>
 #include <wrl.h>
-#include <ctl/memory.hpp>
+#include "ctl/memory.hpp"
 
 #include "cutegfx/Device.hpp"
 #include "Direct3D11Viewport.hpp"
@@ -18,17 +18,19 @@ namespace cutegfx {
 
 class Direct3D11Device : public Device {
 public:
+#pragma pack(push, 1)
+	struct ConstantBufferData {
+		glm::mat4 projection;
+	};
+#pragma pack(pop)
+
 	Direct3D11Device();
-
-	Shader::Format getShaderFormat() const override;
-
-	ctl::RcPtr<Buffer> createBuffer(Buffer::Type type) override;
-
-	ctl::RcPtr<Shader> createShader(Shader::Type type, const void *bytecode, size_t size) override;
 
 	ctl::RcPtr<Viewport> createViewport() override;
 
-	void draw(index_t firstIndex, index_t indexCount) override;
+	void setMesh(const InputMesh &mesh) override;
+
+	void draw(InputMesh::index_t firstIndex, InputMesh::index_t indexCount) override;
 
 	Microsoft::WRL::ComPtr<ID3D11Device> getDevice();
 
@@ -48,11 +50,33 @@ private:
 	Microsoft::WRL::ComPtr<IDXGIDevice> _dxgiDevice;
 	Microsoft::WRL::ComPtr<IDXGIAdapter> _dxgiAdapter;
 	Microsoft::WRL::ComPtr<IDCompositionDevice> _compositionDevice;
+
 	ctl::WeakRcPtr<Direct3D11Viewport> _activeViewport;
+
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> _vertexShader;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> _pixelShader;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> _vertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> _vertexInputLayout;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> _indexBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> _constantBuffer;
+
+	InputMesh _previousMesh{};
 
 	void createDevice();
 
 	void createCompositionDevice();
+
+	void setupShaders();
+
+	void setupVertexInputLayout();
+
+	void setupVertexBuffer(InputMesh::index_t vertexCount);
+
+	void setupIndexBuffer(InputMesh::index_t indexCount);
+
+	void setupConstantBuffer();
+
+	void updateConstantBuffer(const ConstantBufferData &data);
 };
 
 } // namespace cutegfx

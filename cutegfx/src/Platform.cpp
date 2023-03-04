@@ -1,7 +1,7 @@
 #include "cutegfx/Platform.hpp"
 
 #ifdef _WIN32
-#include "impl/Win32Platform.hpp"
+#include "win32/Win32Platform.hpp"
 #endif
 
 using namespace cutegfx;
