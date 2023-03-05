@@ -1,9 +1,6 @@
 #pragma once
 
-#include <memory>
-
-#include <glm/vec2.hpp>
-#include <glm/vec4.hpp>
+#include <glm/glm.hpp>
 #include <ctl/memory.hpp>
 
 #include "Window.hpp"

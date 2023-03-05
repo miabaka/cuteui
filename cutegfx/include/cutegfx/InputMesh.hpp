@@ -10,6 +10,7 @@ public:
 #pragma pack(push, 1)
 	struct Vertex {
 		glm::vec2 position;
+		glm::vec2 uv;
 		glm::u8vec4 color;
 	};
 #pragma pack(pop)

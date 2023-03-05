@@ -10,10 +10,10 @@ MeshBuilder::MeshBuilder() {
 }
 
 MeshBuilder::index_t MeshBuilder::addRect(glm::vec2 p1, glm::vec2 p2, glm::u8vec4 color) {
-	index_t leftTop = emitVertex({p1, color});
-	index_t rightTop = emitVertex({{p2.x, p1.y}, color});
-	index_t leftBottom = emitVertex({{p1.x, p2.y}, color});
-	index_t rightBottom = emitVertex({p2, color});
+	index_t leftTop = emitVertex({p1, {0.f, 0.f}, color});
+	index_t rightTop = emitVertex({{p2.x, p1.y}, {1.f, 0.f}, color});
+	index_t leftBottom = emitVertex({{p1.x, p2.y}, {0.f, 1.f}, color});
+	index_t rightBottom = emitVertex({p2, {1.f, 1.f}, color});
 	return emitIndices(leftTop, rightTop, leftBottom, leftBottom, rightTop, rightBottom);
 }
 

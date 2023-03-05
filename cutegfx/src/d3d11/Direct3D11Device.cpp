@@ -6,7 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "shaders.hpp"
-#include "Direct3D11Viewport.hpp"
+#include "Direct3D11Texture.hpp"
 
 using namespace cutegfx;
 using Microsoft::WRL::ComPtr;
@@ -21,6 +21,10 @@ Direct3D11Device::Direct3D11Device() {
 
 ctl::RcPtr<Viewport> Direct3D11Device::createViewport() {
 	return ctl::RcPtr<Direct3D11Viewport>::alloc(this);
+}
+
+ctl::RcPtr<Texture> Direct3D11Device::createTexture() {
+	return ctl::RcPtr<Direct3D11Texture>::alloc(this);
 }
 
 template<typename T>
@@ -63,11 +67,11 @@ void Direct3D11Device::draw(InputMesh::index_t firstIndex, InputMesh::index_t in
 	_deviceContext->DrawIndexed(indexCount, firstIndex, 0);
 }
 
-ComPtr<ID3D11Device> Direct3D11Device::getDevice() {
+ComPtr<ID3D11Device> Direct3D11Device::getRawDevice() {
 	return _device;
 }
 
-ComPtr<ID3D11DeviceContext> Direct3D11Device::getDeviceContext() {
+ComPtr<ID3D11DeviceContext> Direct3D11Device::getRawDeviceContext() {
 	return _deviceContext;
 }
 
@@ -82,7 +86,7 @@ ComPtr<IDXGIAdapter> Direct3D11Device::getDxgiAdapter() {
 void Direct3D11Device::setActiveViewport(const ctl::RcPtr<Direct3D11Viewport> &viewport) {
 	_activeViewport = viewport;
 	glm::vec2 viewportSize = viewport->getSize();
-	updateConstantBuffer({glm::ortho(0.f, viewportSize.x, viewportSize.y, 0.f)});
+	updateConstantBuffer({glm::ortho(0.f, viewportSize.x, viewportSize.y, 0.f), true});
 }
 
 bool Direct3D11Device::isViewportActive(const ctl::RcPtr<Direct3D11Viewport> &viewport) const {
@@ -90,11 +94,17 @@ bool Direct3D11Device::isViewportActive(const ctl::RcPtr<Direct3D11Viewport> &vi
 }
 
 void Direct3D11Device::createDevice() {
+	UINT flags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+
+#ifndef NDEBUG
+	flags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+
 	HRESULT result = D3D11CreateDevice(
 			nullptr, // adapter
 			D3D_DRIVER_TYPE_HARDWARE,
 			nullptr, // software
-			D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+			flags,
 			nullptr, 0, // featureLevels
 			D3D11_SDK_VERSION,
 			&_device,
@@ -151,7 +161,8 @@ void Direct3D11Device::setupVertexInputLayout() {
 
 	std::array elementDescs = {
 			ElementDesc{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, APPEND, PER_VERTEX, 0},
-			ElementDesc{"COLOR", 0, DXGI_FORMAT_R8G8B8A8_UINT, 0, APPEND, PER_VERTEX, 0}
+			ElementDesc{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, APPEND, PER_VERTEX, 0},
+			ElementDesc{"COLOR", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, APPEND, PER_VERTEX, 0}
 	};
 
 	HRESULT result = _device->CreateInputLayout(

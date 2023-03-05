@@ -12,8 +12,8 @@ using Microsoft::WRL::ComPtr;
 
 Direct3D11Viewport::Direct3D11Viewport(const ctl::RcPtr<Direct3D11Device> &device)
 		: _device(device) {
-	_d3dDevice = device->getDevice();
-	_d3dDeviceContext = device->getDeviceContext();
+	_d3dDevice = device->getRawDevice();
+	_d3dDeviceContext = device->getRawDeviceContext();
 	_compositionDevice = device->getCompositionDevice();
 
 	device->getDxgiAdapter()->GetParent(__uuidof(IDXGIFactory2), &_dxgiFactory);

@@ -9,10 +9,21 @@ struct overloaded : Ts ... {
 
 template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
-Renderer::Renderer(const ctl::RcPtr<Device> &device) : _device(device) {}
+Renderer::Renderer(const ctl::RcPtr<Device> &device)
+		: _device(device),
+		  _sampleTexture(device->createTexture()) {}
+
+ctl::RcPtr<Texture> Renderer::createTexture() {
+	return _device->createTexture();
+}
 
 ctl::RcPtr<Viewport> Renderer::createViewport() {
 	return _device->createViewport();
+}
+
+void Renderer::setTexture(const ctl::RcPtr<Texture> &texture) {
+	submitCurrentMesh();
+	_commandList.emplace_back(SetTextureCommand{texture});
 }
 
 void Renderer::setViewport(const ctl::RcPtr<Viewport> &viewport) {
@@ -39,17 +50,32 @@ void Renderer::fillRect(glm::vec2 p1, glm::vec2 p2, glm::u8vec4 color) {
 	_hasIncompleteMesh = true;
 }
 
+void Renderer::beginFrame() {
+	setTexture(_sampleTexture);
+}
+
 void Renderer::render() {
 	submitCurrentMesh();
 
 	_device->setMesh(_meshBuilder.getMesh());
 	_meshBuilder.reset();
 
+	ctl::RcPtr<Texture> texture;
 	ctl::RcPtr<Viewport> viewport;
 
 	for (auto &command: _commandList) {
 		std::visit(overloaded{
+				[&](SetTextureCommand &cmd) {
+					if (cmd.texture == texture)
+						return;
+
+					texture = cmd.texture;
+					texture->use();
+				},
 				[&](SetViewportCommand &cmd) {
+					if (cmd.viewport == viewport)
+						return;
+
 					viewport = cmd.viewport;
 					viewport->use();
 				},

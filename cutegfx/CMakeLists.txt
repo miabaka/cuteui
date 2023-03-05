@@ -26,6 +26,8 @@ if (WIN32)
             src/d3d11/Direct3D11Device.hpp
             src/d3d11/Direct3D11Viewport.cpp
             src/d3d11/Direct3D11Viewport.hpp
+            src/d3d11/Direct3D11Texture.cpp
+            src/d3d11/Direct3D11Texture.hpp
             src/d3d11/shaders.hpp
             src/win32/Win32HelperWindow.cpp
             src/win32/Win32HelperWindow.hpp

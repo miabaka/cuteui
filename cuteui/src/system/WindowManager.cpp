@@ -66,6 +66,8 @@ void WindowManager::renderMain() {
 			windows.assign(_visibleWindows.begin(), _visibleWindows.end());
 		}
 
+		renderer.beginFrame();
+
 		if (windows.empty()) {
 			sUpdate(UpdateType::EventLoopStopRequest);
 			break;

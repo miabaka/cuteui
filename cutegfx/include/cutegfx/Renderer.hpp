@@ -16,7 +16,11 @@ class Renderer : public ctl::RcObject {
 public:
 	explicit Renderer(const ctl::RcPtr<Device> &device);
 
+	ctl::RcPtr<Texture> createTexture();
+
 	ctl::RcPtr<Viewport> createViewport();
+
+	void setTexture(const ctl::RcPtr<Texture> &texture);
 
 	void setViewport(const ctl::RcPtr<Viewport> &viewport);
 
@@ -26,9 +30,15 @@ public:
 
 	void fillRect(glm::vec2 p1, glm::vec2 p2, glm::u8vec4 color);
 
+	void beginFrame();
+
 	void render();
 
 private:
+	struct SetTextureCommand {
+		ctl::RcPtr<Texture> texture;
+	};
+
 	struct SetViewportCommand {
 		ctl::RcPtr<Viewport> viewport;
 	};
@@ -46,9 +56,16 @@ private:
 		MeshBuilder::index_t indexCount;
 	};
 
-	using RenderCommand = std::variant<SetViewportCommand, ResizeCommand, ClearCommand, DrawMeshCommand>;
+	using RenderCommand = std::variant<
+			SetViewportCommand,
+			ResizeCommand,
+			ClearCommand,
+			DrawMeshCommand,
+			SetTextureCommand
+	>;
 
 	ctl::RcPtr<Device> _device;
+	ctl::RcPtr<Texture> _sampleTexture;
 	std::deque<RenderCommand> _commandList;
 	MeshBuilder _meshBuilder;
 	bool _hasIncompleteMesh = false;
