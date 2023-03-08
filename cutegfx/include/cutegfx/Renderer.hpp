@@ -17,6 +17,8 @@ class Renderer : public ctl::RcObject {
 public:
 	explicit Renderer(const ctl::RcPtr<Device> &device);
 
+	ctl::RcPtr<Device> getDevice() const;
+
 	ctl::RcPtr<Texture> createTexture();
 
 	ctl::RcPtr<Viewport> createViewport();

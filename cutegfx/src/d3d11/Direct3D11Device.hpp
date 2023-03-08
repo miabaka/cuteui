@@ -33,6 +33,8 @@ public:
 
 	ctl::RcPtr<Texture> createTexture() override;
 
+	ctl::RcPtr<Texture> createTexture(glm::uvec2 size, const void *data) override;
+
 	void setMesh(const InputMesh &mesh) override;
 
 	void draw(InputMesh::index_t firstIndex, InputMesh::index_t indexCount) override;
@@ -60,6 +62,7 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> _vertexShader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> _pixelShader;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> _samplerState;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> _vertexBuffer;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> _vertexInputLayout;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> _indexBuffer;
@@ -72,6 +75,8 @@ private:
 	void createCompositionDevice();
 
 	void setupShaders();
+
+	void setupSamplerState();
 
 	void setupVertexInputLayout();
 

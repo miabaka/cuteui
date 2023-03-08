@@ -5,22 +5,27 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_library(cutegfx STATIC
         include/cutegfx/Device.hpp
+        include/cutegfx/InputMesh.hpp
         include/cutegfx/MeshBuilder.hpp
         include/cutegfx/NinePatchMetrics.hpp
         include/cutegfx/Platform.hpp
         include/cutegfx/Renderer.hpp
+        include/cutegfx/Texture.hpp
+        include/cutegfx/TextureLoader.hpp
         include/cutegfx/Viewport.hpp
         include/cutegfx/Window.hpp
         src/MeshBuilder.cpp
         src/NinePatchMetrics.cpp
         src/Platform.cpp
-        src/Renderer.cpp)
+        src/Renderer.cpp
+        src/TextureLoader.cpp)
 
 target_include_directories(cutegfx PUBLIC include)
 
 target_link_libraries(cutegfx PUBLIC
+        ctl
         glm
-        ctl)
+        stb_image)
 
 if (WIN32)
     target_sources(cutegfx PRIVATE

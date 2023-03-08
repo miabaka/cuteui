@@ -25,6 +25,8 @@ public:
 
 	Renderer &getRenderer() override;
 
+	TextureLoader &getTextureLoader() override;
+
 	int runEventLoop(std::function<void()> tickHandler) override;
 
 	void executeTickHandlerIndirect(Platform::TickType tickType) override;
@@ -33,6 +35,7 @@ private:
 	WNDCLASSEXW _windowClass;
 	WNDCLASSEXW _helperWindowClass;
 	ctl::RcPtr<Renderer> _renderer;
+	ctl::RcPtr<TextureLoader> _textureLoader;
 	Win32HelperWindow _helperWindow;
 
 	static WNDCLASSEXW registerWindowClass();

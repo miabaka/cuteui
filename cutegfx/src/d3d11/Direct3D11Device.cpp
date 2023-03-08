@@ -15,6 +15,7 @@ Direct3D11Device::Direct3D11Device() {
 	createDevice();
 	createCompositionDevice();
 	setupShaders();
+	setupSamplerState();
 	setupVertexInputLayout();
 	setupConstantBuffer();
 }
@@ -25,6 +26,10 @@ ctl::RcPtr<Viewport> Direct3D11Device::createViewport() {
 
 ctl::RcPtr<Texture> Direct3D11Device::createTexture() {
 	return ctl::RcPtr<Direct3D11Texture>::alloc(this);
+}
+
+ctl::RcPtr<Texture> Direct3D11Device::createTexture(glm::uvec2 size, const void *data) {
+	return ctl::RcPtr<Direct3D11Texture>::alloc(this, size, data);
 }
 
 template<typename T>
@@ -151,6 +156,22 @@ void Direct3D11Device::setupShaders() {
 
 	_deviceContext->PSSetShader(_pixelShader.Get(), nullptr, 0);
 	_deviceContext->VSSetShader(_vertexShader.Get(), nullptr, 0);
+}
+
+void Direct3D11Device::setupSamplerState() {
+	D3D11_SAMPLER_DESC samplerDesc{};
+
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+
+	HRESULT result = _device->CreateSamplerState(&samplerDesc, &_samplerState);
+
+	if (FAILED(result))
+		throw std::runtime_error("ID3D11Device::CreateSamplerState failed");
+
+	_deviceContext->PSSetSamplers(0, 1, _samplerState.GetAddressOf());
 }
 
 void Direct3D11Device::setupVertexInputLayout() {

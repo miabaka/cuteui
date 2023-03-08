@@ -17,7 +17,8 @@ class Direct3D11Device;
 
 class Direct3D11Texture : public Texture {
 public:
-	explicit Direct3D11Texture(const ctl::RcPtr<Direct3D11Device> &device);
+	explicit Direct3D11Texture(
+			const ctl::RcPtr<Direct3D11Device> &device, glm::uvec2 size = {}, const void *data = nullptr);
 
 private:
 	ctl::RcPtr<Direct3D11Device> _device;
@@ -29,7 +30,7 @@ private:
 
 	void use() override;
 
-	void createTexture();
+	void createTexture(glm::uvec2 size, const void *data);
 
 	void createResourceView();
 };

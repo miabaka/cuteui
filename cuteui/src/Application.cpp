@@ -58,11 +58,11 @@ Theme &Application::getTheme() {
 }
 
 void Application::prepareTheme() {
-	cutegfx::Renderer &renderer = _platform->getRenderer();
+	cutegfx::TextureLoader &textureLoader = _platform->getTextureLoader();
 
 	Theme::NinePatchImage image{};
 
-	image.texture = renderer.createTexture();
+	image.texture = textureLoader.loadFromFile("data/test.png");
 
 	cutegfx::NinePatchMetrics::InitData metricsInit{};
 

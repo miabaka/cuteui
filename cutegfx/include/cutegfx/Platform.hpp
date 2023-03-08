@@ -5,6 +5,7 @@
 #include <string>
 
 #include "Renderer.hpp"
+#include "TextureLoader.hpp"
 #include "Window.hpp"
 
 namespace cutegfx {
@@ -23,6 +24,8 @@ public:
 	virtual ctl::RcPtr<Window> createWindow() = 0;
 
 	virtual Renderer &getRenderer() = 0;
+
+	virtual TextureLoader &getTextureLoader() = 0;
 
 	virtual int runEventLoop(std::function<void(void)> tickHandler) = 0;
 

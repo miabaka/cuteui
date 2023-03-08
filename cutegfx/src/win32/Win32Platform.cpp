@@ -11,7 +11,9 @@ using namespace cutegfx;
 Win32Platform::Win32Platform()
 		: _windowClass(registerWindowClass()),
 		  _helperWindowClass(registerHelperWindowClass()),
-		  _renderer(ctl::RcPtr<Renderer>::alloc(ctl::RcPtr<Direct3D11Device>::alloc())) {};
+		  _renderer(ctl::RcPtr<Renderer>::alloc(ctl::RcPtr<Direct3D11Device>::alloc())) {
+	_textureLoader = ctl::RcPtr<TextureLoader>::alloc(_renderer->getDevice());
+};
 
 Win32Platform::~Win32Platform() {
 	unregisterWindowClasses();
@@ -23,6 +25,10 @@ ctl::RcPtr<Window> Win32Platform::createWindow() {
 
 Renderer &Win32Platform::getRenderer() {
 	return *_renderer;
+}
+
+TextureLoader &Win32Platform::getTextureLoader() {
+	return *_textureLoader;
 }
 
 int Win32Platform::runEventLoop(std::function<void()> tickHandler) {

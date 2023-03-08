@@ -13,6 +13,10 @@ Renderer::Renderer(const ctl::RcPtr<Device> &device)
 		: _device(device),
 		  _sampleTexture(device->createTexture()) {}
 
+ctl::RcPtr<Device> Renderer::getDevice() const {
+	return _device;
+}
+
 ctl::RcPtr<Texture> Renderer::createTexture() {
 	return _device->createTexture();
 }

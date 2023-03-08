@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/glm.hpp>
 #include <ctl/memory.hpp>
 
 #include "InputMesh.hpp"
@@ -13,6 +14,8 @@ public:
 	virtual ctl::RcPtr<Viewport> createViewport() = 0;
 
 	virtual ctl::RcPtr<Texture> createTexture() = 0;
+
+	virtual ctl::RcPtr<Texture> createTexture(glm::uvec2 size, const void *data) = 0;
 
 	virtual void setMesh(const InputMesh &mesh) = 0;
 
