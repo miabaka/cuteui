@@ -5,8 +5,9 @@
 
 #include <glm/glm.hpp>
 
-#include "MeshBuilder.hpp"
 #include "Device.hpp"
+#include "MeshBuilder.hpp"
+#include "NinePatchMetrics.hpp"
 
 namespace cutegfx {
 
@@ -18,6 +19,8 @@ public:
 	MeshBuilder();
 
 	index_t addRect(glm::vec2 p1, glm::vec2 p2, glm::u8vec4 color);
+
+	index_t addNinePatch(glm::vec2 p1, glm::vec2 p2, const NinePatchMetrics &metrics);
 
 	void reset();
 

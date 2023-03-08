@@ -28,7 +28,7 @@ void Direct3D11Texture::createTexture() {
 	textureDesc.Height = 1;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
@@ -45,7 +45,7 @@ void Direct3D11Texture::createTexture() {
 void Direct3D11Texture::createResourceView() {
 	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc{};
 
-	viewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	viewDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	viewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	viewDesc.Texture2D.MipLevels = 1;
 

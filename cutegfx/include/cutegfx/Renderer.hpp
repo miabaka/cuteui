@@ -9,6 +9,7 @@
 
 #include "Device.hpp"
 #include "MeshBuilder.hpp"
+#include "NinePatchMetrics.hpp"
 
 namespace cutegfx {
 
@@ -29,6 +30,8 @@ public:
 	void clear(glm::vec4 color);
 
 	void fillRect(glm::vec2 p1, glm::vec2 p2, glm::u8vec4 color);
+
+	void drawNinePatch(glm::vec2 p1, glm::vec2 p2, const NinePatchMetrics &metrics);
 
 	void beginFrame();
 
@@ -65,6 +68,7 @@ private:
 	>;
 
 	ctl::RcPtr<Device> _device;
+	ctl::RcPtr<Texture> _lastTexture;
 	ctl::RcPtr<Texture> _sampleTexture;
 	std::deque<RenderCommand> _commandList;
 	MeshBuilder _meshBuilder;

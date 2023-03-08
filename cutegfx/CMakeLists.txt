@@ -6,11 +6,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_library(cutegfx STATIC
         include/cutegfx/Device.hpp
         include/cutegfx/MeshBuilder.hpp
+        include/cutegfx/NinePatchMetrics.hpp
         include/cutegfx/Platform.hpp
         include/cutegfx/Renderer.hpp
         include/cutegfx/Viewport.hpp
         include/cutegfx/Window.hpp
         src/MeshBuilder.cpp
+        src/NinePatchMetrics.cpp
         src/Platform.cpp
         src/Renderer.cpp)
 

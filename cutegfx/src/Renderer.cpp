@@ -22,8 +22,13 @@ ctl::RcPtr<Viewport> Renderer::createViewport() {
 }
 
 void Renderer::setTexture(const ctl::RcPtr<Texture> &texture) {
+	if (texture == _lastTexture)
+		return;
+
 	submitCurrentMesh();
+
 	_commandList.emplace_back(SetTextureCommand{texture});
+	_lastTexture = texture;
 }
 
 void Renderer::setViewport(const ctl::RcPtr<Viewport> &viewport) {
@@ -50,28 +55,32 @@ void Renderer::fillRect(glm::vec2 p1, glm::vec2 p2, glm::u8vec4 color) {
 	_hasIncompleteMesh = true;
 }
 
+void Renderer::drawNinePatch(glm::vec2 p1, glm::vec2 p2, const NinePatchMetrics &metrics) {
+	MeshBuilder::index_t firstIndex = _meshBuilder.addNinePatch(p1, p2, metrics);
+
+	if (!_hasIncompleteMesh)
+		_firstIncompleteMeshIndex = firstIndex;
+
+	_hasIncompleteMesh = true;
+}
+
 void Renderer::beginFrame() {
 	setTexture(_sampleTexture);
 }
 
 void Renderer::render() {
+	_lastTexture = nullptr;
+
 	submitCurrentMesh();
 
 	_device->setMesh(_meshBuilder.getMesh());
 	_meshBuilder.reset();
 
-	ctl::RcPtr<Texture> texture;
 	ctl::RcPtr<Viewport> viewport;
 
 	for (auto &command: _commandList) {
 		std::visit(overloaded{
-				[&](SetTextureCommand &cmd) {
-					if (cmd.texture == texture)
-						return;
-
-					texture = cmd.texture;
-					texture->use();
-				},
+				[&](SetTextureCommand &cmd) { cmd.texture->use(); },
 				[&](SetViewportCommand &cmd) {
 					if (cmd.viewport == viewport)
 						return;

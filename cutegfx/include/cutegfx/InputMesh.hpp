@@ -3,8 +3,7 @@
 #include <cstdint>
 #include <glm/glm.hpp>
 
-class InputMesh {
-public:
+struct InputMesh {
 	using index_t = uint32_t;
 
 #pragma pack(push, 1)

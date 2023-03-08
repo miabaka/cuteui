@@ -20,15 +20,13 @@ Application::Application() {
 	if (!_platform)
 		throw std::runtime_error("Failed to create cutegfx platform");
 
+	prepareTheme();
+
 	_instance = this;
 }
 
 Application::~Application() {
 	_instance = nullptr;
-}
-
-cutegfx::Platform &Application::getPlatform() {
-	return *_platform;
 }
 
 int Application::run() {
@@ -47,6 +45,33 @@ int Application::run() {
 	return result;
 }
 
+cutegfx::Platform &Application::getPlatform() {
+	return *_platform;
+}
+
 WindowManager &Application::getWindowManager() {
 	return _windowManager;
+}
+
+Theme &Application::getTheme() {
+	return _theme;
+}
+
+void Application::prepareTheme() {
+	cutegfx::Renderer &renderer = _platform->getRenderer();
+
+	Theme::NinePatchImage image{};
+
+	image.texture = renderer.createTexture();
+
+	cutegfx::NinePatchMetrics::InitData metricsInit{};
+
+	metricsInit.border = {4, 4, 4, 4};
+	metricsInit.offset = {0, 0};
+	metricsInit.size = {16, 16};
+	metricsInit.atlasSize = {16, 16};
+
+	image.metrics = cutegfx::NinePatchMetrics(metricsInit);
+
+	_theme.images.buttonNormal = image;
 }
