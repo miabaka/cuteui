@@ -65,11 +65,6 @@ public:
 		_object->release();
 	}
 
-	template<typename ...TArgs>
-	static RcPtr alloc(TArgs &&...args) {
-		return RcPtr<T>(new T(std::forward<TArgs>(args)...));
-	}
-
 	T *get() const {
 		return _object;
 	}
@@ -102,6 +97,11 @@ public:
 private:
 	T *_object = nullptr;
 };
+
+template<typename T, typename ...TArgs>
+RcPtr<T> rcNew(TArgs &&...args) {
+	return RcPtr<T>(new T(std::forward<TArgs>(args)...));
+}
 
 } // namespace ctl
 

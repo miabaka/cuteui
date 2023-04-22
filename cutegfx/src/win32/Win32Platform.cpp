@@ -11,8 +11,8 @@ using namespace cutegfx;
 Win32Platform::Win32Platform()
 		: _windowClass(registerWindowClass()),
 		  _helperWindowClass(registerHelperWindowClass()),
-		  _renderer(ctl::RcPtr<Renderer>::alloc(ctl::RcPtr<Direct3D11Device>::alloc())) {
-	_textureLoader = ctl::RcPtr<TextureLoader>::alloc(_renderer->getDevice());
+		  _renderer(ctl::rcNew<Renderer>(ctl::rcNew<Direct3D11Device>())) {
+	_textureLoader = ctl::rcNew<TextureLoader>(_renderer->getDevice());
 };
 
 Win32Platform::~Win32Platform() {
@@ -20,7 +20,7 @@ Win32Platform::~Win32Platform() {
 }
 
 ctl::RcPtr<Window> Win32Platform::createWindow() {
-	return ctl::RcPtr<Win32Window>::alloc();
+	return ctl::rcNew<Win32Window>();
 }
 
 Renderer &Win32Platform::getRenderer() {

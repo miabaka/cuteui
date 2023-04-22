@@ -21,15 +21,15 @@ Direct3D11Device::Direct3D11Device() {
 }
 
 ctl::RcPtr<Viewport> Direct3D11Device::createViewport() {
-	return ctl::RcPtr<Direct3D11Viewport>::alloc(this);
+	return ctl::rcNew<Direct3D11Viewport>(this);
 }
 
 ctl::RcPtr<Texture> Direct3D11Device::createTexture() {
-	return ctl::RcPtr<Direct3D11Texture>::alloc(this);
+	return ctl::rcNew<Direct3D11Texture>(this);
 }
 
 ctl::RcPtr<Texture> Direct3D11Device::createTexture(glm::uvec2 size, const void *data) {
-	return ctl::RcPtr<Direct3D11Texture>::alloc(this, size, data);
+	return ctl::rcNew<Direct3D11Texture>(this, size, data);
 }
 
 template<typename T>
