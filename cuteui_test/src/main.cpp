@@ -11,10 +11,20 @@ public:
 		box->setHorizontalAlignment(Alignment::Center);
 		box->setVerticalAlignment(Alignment::Center);
 
-		for (int i = 0; i < 10; i++)
-			box->add(ctl::rcNew<Button>());
+		for (int i = 0; i < 10; i++) {
+			auto button = ctl::rcNew<Button>();
+			button->setHorizontalAlignment(i % 2 == 0 ? Alignment::Start : Alignment::End);
+			box->add(button);
+		}
 
-		auto window = ctl::rcNew<Window>(glm::ivec2{640, 400}, "Мия пишет гуи");
+		auto horizontalBox = ctl::rcNew<Box>(Direction::Horizontal, 6);
+
+		for (int i = 0; i < 5; i++)
+			horizontalBox->add(ctl::rcNew<Button>());
+
+		box->add(horizontalBox);
+
+		auto window = ctl::rcNew<Window>(box->computeRequiredSize() + 18, "Мия пишет гуи");
 
 		window->setMainWidget(box);
 		window->setVisible(true);
